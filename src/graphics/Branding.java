@@ -17,8 +17,11 @@ import javax.swing.border.Border;
 public class Branding {
     public Font windowsFontExtraSmall, windowsFontSmall, windowsFontMedium, windowsFontLarge, windowsFontExtraLarge, windowsFontGiant;
     public Font windowsFont2ExtraSmall, windowsFont2Small, windowsFont2Medium, windowsFont2Large, windowsFont2ExtraLarge;
-    public ImageIcon imgWindows67;
+    public ImageIcon imgWindows67, imgHangman6;
     public ImageIcon icoWindows, icoRecycleBin, icoComputer, icoDirections, icoSettings;
+    public ImageIcon[] icoTools = new ImageIcon[16];
+    public ImageIcon icoWinMax, icoWinMin, icoWinClose;
+
 
     public Branding(){
         initializeFonts();
@@ -31,9 +34,12 @@ public class Branding {
     public Color buttonColor = Color.decode("#D9D9D9");
 
     // Shading Colors
-    public Color gray1 = Color.decode("#666666");
+    public Color gray0 = Color.decode("#dddddd");
+    public Color gray1 = Color.decode("#A4A4A4");
     public Color gray2 = Color.decode("#666666");
-    public Color gray3 = Color.decode("#666666");
+    public Color gray3 = Color.decode("#5F5F5F");
+    public Color gray4 = Color.decode("#C0C0C0");
+    public Color blue1 = Color.decode("#000080");
 
     // Basic Colors
     public Color black = Color.decode("#000000");
@@ -68,6 +74,8 @@ public class Branding {
         System.out.println("Loading Images...");
         try {
             BufferedImage buff_imgWindows67 = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/images/windows67.png"));
+
+            BufferedImage buff_imgHangman6 = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/images/hangman6.png"));
             
             BufferedImage buff_icoWindowsIcon = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/icons/windows-0.png"));
             BufferedImage buff_icoRecycleBinIcon = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/icons/recycle_bin.png"));
@@ -75,7 +83,32 @@ public class Branding {
             BufferedImage buff_icoDirectionsIcon = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/icons/directions.png"));
             BufferedImage buff_icoSettingsIcon = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/icons/settings.png"));
             
+            BufferedImage buff_icoWinMax = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/icons/winMax.png"));
+            BufferedImage buff_icoWinMin = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/icons/winMin.png"));
+            BufferedImage buff_icoWinClose = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/icons/winClose.png"));
+
+            icoWinMax = resizeImage(buff_icoWinMax, 0.06f);
+            icoWinMin = resizeImage(buff_icoWinMin, 0.06f);
+            icoWinClose = resizeImage(buff_icoWinClose, 0.06f);
+
+
+            
+            BufferedImage[] buffTools = new BufferedImage[16];
+            String[] toolPaths = {
+                "tool1-1.png", "tool1-2.png", "tool2-1.png", "tool2-2.png",
+                "tool3-1.png", "tool3-2.png", "tool4-1.png", "tool4-2.png",
+                "tool5-1.png", "tool5-2.png", "tool6-1.png", "tool6-2.png",
+                "tool7-1.png", "tool7-2.png", "tool8-1.png", "tool8-2.png"
+            };
+            for (int i = 0; i < 16; i++) {
+                buffTools[i] = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/icons/" + toolPaths[i]));
+                icoTools[i] = resizeImage(buffTools[i], 0.4f);
+            }
+
+            
             imgWindows67 = resizeImage(buff_imgWindows67, 0.5f);
+
+            imgHangman6 = resizeImage(buff_imgHangman6, 6f);
 
             icoWindows = resizeImage(buff_icoWindowsIcon, 0.9f);
             icoRecycleBin = resizeImage(buff_icoRecycleBinIcon, 0.6f);
@@ -83,7 +116,7 @@ public class Branding {
             icoDirections = resizeImage(buff_icoDirectionsIcon, 0.6f);
             icoSettings = resizeImage(buff_icoSettingsIcon, 0.6f);
 
-            //sampleGIF = new ImageIcon(getClass().getResource("/Assets/Images/jeopardy-animation.gif"));
+            //sampleGIF = new ImageIcon(getClass().getResource("image.gif"));
             //sampleGIF = resizeGIF(sampleGIF, 800, 150);
 
         } catch (IOException ex) {
@@ -112,29 +145,57 @@ public class Branding {
         return new ImageIcon(resized);
     }
 
-    public JButton designButtonFlat(JButton button){
+    public ImageIcon resizeImageIcon(ImageIcon original, float scale) {
+        Image img = original.getImage();
+        
+        int newWidth  = Math.round(img.getWidth(null)  * scale);
+        int newHeight = Math.round(img.getHeight(null) * scale);
+
+        Image tmp = img.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+        BufferedImage resized = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g2d = resized.createGraphics();
+        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                            RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g2d.drawImage(tmp, 0, 0, null);
+        g2d.dispose();
+        
+        return new ImageIcon(resized);
+    }
+
+    public JButton designButtonDefault(JButton button){
         button.setBackground(buttonColor);
         button.setFocusPainted(false);
         Border highlight = BorderFactory.createMatteBorder(2,2,0,0,white);
         Border grayShade = BorderFactory.createMatteBorder(0,0,2,2,gray2);
         Border shadow = BorderFactory.createMatteBorder(0,0,2,2,black);
-
         Border combined1 = BorderFactory.createCompoundBorder(grayShade, highlight);
         Border combined = BorderFactory.createCompoundBorder(shadow, combined1);
-        button.setFont(windowsFont2Small);
+        button.setFont(windowsFontSmall);
         button.setBorder(combined);
         return button;
     }
-    public JButton designButtonPop(JButton button){
+    public JButton designButtonDecoderKeys(JButton button){
         button.setBackground(buttonColor);
         button.setFocusPainted(false);
-        Border highlight = BorderFactory.createMatteBorder(4,4,0,0,white);
-        Border grayShade = BorderFactory.createMatteBorder(0,0,4,4,gray2);
+        Border highlight = BorderFactory.createMatteBorder(3,3,0,0,white);
+        Border grayShade = BorderFactory.createMatteBorder(0,0,3,3,gray2);
         Border shadow = BorderFactory.createMatteBorder(0,0,3,3,black);
-
         Border combined1 = BorderFactory.createCompoundBorder(grayShade, highlight);
         Border combined = BorderFactory.createCompoundBorder(shadow, combined1);
-        button.setFont(windowsFont2ExtraSmall);
+        button.setFont(windowsFontSmall);
+        button.setBorder(combined);
+        return button;
+    }
+    public JButton designButtonFlat(JButton button){
+        button.setBackground(buttonColor);
+        button.setFocusPainted(false);
+        Border highlight = BorderFactory.createMatteBorder(1,1,0,0,white);
+        Border grayShade = BorderFactory.createMatteBorder(0,0,1,1,gray2);
+        Border shadow = BorderFactory.createMatteBorder(0,0,1,1,black);
+        Border combined1 = BorderFactory.createCompoundBorder(grayShade, highlight);
+        Border combined = BorderFactory.createCompoundBorder(shadow, combined1);
+        button.setFont(windowsFontSmall);
         button.setBorder(combined);
         return button;
     }

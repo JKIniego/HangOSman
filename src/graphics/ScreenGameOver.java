@@ -2,20 +2,15 @@ package graphics;
 
 import engine.MainEngine;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Image;
-import java.awt.Insets;
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class ScreenGameOver extends JPanel {
-    Branding branding;
-    MainEngine mainEngine;
+    private Branding branding;
+    private MainEngine mainEngine;
 
     public ScreenGameOver(MainEngine mainEngine, Branding branding) {
         this.branding = branding;
@@ -29,7 +24,7 @@ public class ScreenGameOver extends JPanel {
             @Override
             public void keyPressed(java.awt.event.KeyEvent e) {
                 System.out.println("Key Pressed - Restarting...");
-                mainEngine.guiChangeScreen("ScreenStart");
+                mainEngine.startButtonPressed("ScreenStart");
             }
         });
 
@@ -86,12 +81,12 @@ public class ScreenGameOver extends JPanel {
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.fill = GridBagConstraints.BOTH; // fill horizontally and vertically
-        gbc.weightx = 1.0; // allow horizontal stretching
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
         gbc.ipadx = 500;
         gbc.gridy = 0;
         gbc.ipady = 50;
-        gbc.weighty = 0.1; // optional: proportional vertical space
+        gbc.weighty = 0.1;
         displayPanel.add(headerPanel, gbc);
 
         gbc.gridy++;

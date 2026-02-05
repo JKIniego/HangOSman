@@ -14,10 +14,13 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 public class ScreenDesktop extends JPanel {
-    Branding branding;
-    MainEngine mainEngine;
+    private Branding branding;
+    private MainEngine mainEngine;
     private JButton selectedDesktopIcon = null;
-    
+
+    private WindowDecoder windowDecoder;
+    private WindowStickman windowStickman;
+
     public ScreenDesktop(MainEngine mainEngine, Branding branding) {
         this.branding = branding;
         this.mainEngine = mainEngine;
@@ -25,6 +28,7 @@ public class ScreenDesktop extends JPanel {
         setLayout(new BorderLayout());
         initializeTaskbar();
         initializeDesktopIcons();
+        initializeDesktopWindows();
         this.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
@@ -34,6 +38,25 @@ public class ScreenDesktop extends JPanel {
                 }
             }
         });
+        setVisible(true);
+    }
+
+    public void initializeDesktopWindows() {
+        JPanel desktopWindows = new JPanel();
+        desktopWindows.setLayout(null);
+        desktopWindows.setOpaque(false);
+
+        windowDecoder = new WindowDecoder(mainEngine, branding);
+        windowDecoder.setSize(windowDecoder.getPreferredSize());
+        windowDecoder.setLocation(100, 200);
+
+        windowStickman = new WindowStickman(mainEngine, branding);
+        windowStickman.setSize(windowStickman.getPreferredSize());
+        windowStickman.setLocation(550, 70);
+
+        desktopWindows.add(windowDecoder, BorderLayout.CENTER);
+        desktopWindows.add(windowStickman, BorderLayout.CENTER);
+        this.add(desktopWindows, BorderLayout.CENTER);
     }
 
     public void initializeDesktopIcons() {
@@ -86,7 +109,7 @@ public class ScreenDesktop extends JPanel {
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     // double-click detected
-                    System.out.println(text + " clicked!");
+                    mainEngine.desktopIconsPressed(text);
                 }
             }
         });
@@ -114,11 +137,12 @@ public class ScreenDesktop extends JPanel {
         JButton startButton = new JButton("Start");
         startButton.setIcon(branding.icoWindows);
         startButton.setPreferredSize(new java.awt.Dimension(100, 32));
-        branding.designButtonFlat(startButton);
+        branding.designButtonDefault(startButton);
+        startButton.setFont(branding.windowsFont2Small);
         taskbar.add(startButton);
 
         startButton.addActionListener(e -> {
-            mainEngine.guiChangeScreen("ScreenGameOver");
+            mainEngine.startButtonPressed("ScreenGameOver");
             });
     }
     
@@ -130,5 +154,9 @@ public class ScreenDesktop extends JPanel {
         int x = (getWidth() - img.getWidth(this)) / 2;
         int y = (getHeight() - img.getHeight(this)) / 2;
         g.drawImage(img, x, y, this);
+    }
+
+    public WindowDecoder getWindowDecoder() {
+        return windowDecoder;
     }
 }

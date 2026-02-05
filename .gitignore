@@ -1,0 +1,4 @@
+# Metals server/cache
+.metals/
+.bloop/
+metals.sbt

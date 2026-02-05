@@ -13,6 +13,9 @@ public class MainGUI {
     private JPanel mainPanel;
     private Branding branding;
     private OverlayEffect overlay;
+    private ScreenStart scrnStartScreen;
+    private ScreenDesktop scrnDesktop;
+    private ScreenGameOver scrnGameOver;
 
     public MainGUI(MainEngine engine) {
         this.engine = engine;
@@ -30,6 +33,7 @@ public class MainGUI {
         mainFrame.setSize(new Dimension(1240,720));
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setTitle("Windows67");
+        mainFrame.setIconImage(branding.icoWindows.getImage());
         mainFrame.setLocationRelativeTo(null);
     }
 
@@ -38,9 +42,9 @@ public class MainGUI {
         mainPanel.setBackground(Color.BLUE);
         mainPanel.setLayout(new CardLayout());
         
-        ScreenStart scrnStartScreen = new ScreenStart(engine, branding);
-        ScreenDesktop scrnDesktop = new ScreenDesktop(engine, branding);
-        ScreenGameOver scrnGameOver = new ScreenGameOver(engine, branding);
+        scrnStartScreen = new ScreenStart(engine, branding);
+        scrnDesktop = new ScreenDesktop(engine, branding);
+        scrnGameOver = new ScreenGameOver(engine, branding);
 
         mainPanel.add(scrnStartScreen, "ScreenStart");
         mainPanel.add(scrnDesktop, "ScreenDesktop");
@@ -48,14 +52,35 @@ public class MainGUI {
         mainFrame.add(mainPanel);
     }
 
-     private void initializeOverlay() {
+    private void initializeOverlay() {
         overlay = new OverlayEffect("overlay4.png");
         mainFrame.setGlassPane(overlay);
-        overlay.setVisible(true); // toggle if needed
+        overlay.setVisible(true); 
     }
+
+
+    // Updating Methods
 
     public void setOverlayVisible(boolean visible) {
         overlay.setVisible(visible);
+    }
+
+    public void newRedactedWord(String redactedWord) {
+        if (scrnDesktop != null) {
+            WindowDecoder decoder = scrnDesktop.getWindowDecoder();
+            if (decoder != null) {
+                decoder.newRedactedWord(redactedWord);
+            }
+        }
+    }
+
+    public void revealLetterInDecoder(String redactedWord, char letter) {
+        if (scrnDesktop != null) {
+            WindowDecoder decoder = scrnDesktop.getWindowDecoder();
+            if (decoder != null) {
+                decoder.revealLetter(redactedWord, letter);
+            }
+        }
     }
 
     public void changeScreen(String screenName){

@@ -10,8 +10,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public class ScreenStart extends JPanel {
-    Branding branding;
-    MainEngine mainEngine;
+    private Branding branding;
+    private MainEngine mainEngine;
 
     public ScreenStart(MainEngine mainEngine, Branding branding) {
         this.branding = branding;
@@ -21,8 +21,9 @@ public class ScreenStart extends JPanel {
         JButton startButton = new JButton("Start");
         startButton.setIcon(branding.icoWindows);
         startButton.setPreferredSize(new java.awt.Dimension(100, 32));
-        startButton.addActionListener(e -> {mainEngine.guiChangeScreen("ScreenDesktop");});
-        branding.designButtonFlat(startButton);
+        startButton.addActionListener(e -> {mainEngine.startButtonPressed("ScreenDesktop");});
+        branding.designButtonDefault(startButton);
+        startButton.setFont(branding.windowsFont2Small);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(400, 0, 0, 0);
         add(startButton, gbc);

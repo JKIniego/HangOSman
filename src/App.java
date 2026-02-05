@@ -6,8 +6,5 @@ public class App {
         MainEngine engine = new MainEngine();
         MainGUI gui = new MainGUI(engine);
         engine.setGUI(gui);
-
-
-        
     }
 }
