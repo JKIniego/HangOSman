@@ -26,7 +26,7 @@ public class OverlayEffect extends JComponent {
 
     private void startFlicker() {
         new Timer(70, e -> {
-            alpha = 0.4f + (float) Math.random() * 0.3f;
+            alpha = 0.2f + (float) Math.random() * 0.1f;
             repaint();
         }).start();
     }

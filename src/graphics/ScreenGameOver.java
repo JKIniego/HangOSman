@@ -7,6 +7,7 @@ import java.awt.GridBagLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 public class ScreenGameOver extends JPanel {
     private Branding branding;
@@ -72,6 +73,7 @@ public class ScreenGameOver extends JPanel {
         messageLabel.setHorizontalAlignment(JLabel.LEFT);
         messageLabel.setVerticalAlignment(JLabel.TOP);
         messagePanel.add(messageLabel, BorderLayout.CENTER);
+        startFlickerEffect(messageLabel);
 
         JPanel displayPanel = new JPanel();
         displayPanel.setLayout(new GridBagLayout());
@@ -106,5 +108,23 @@ public class ScreenGameOver extends JPanel {
 
 
         add(displayPanel);
+    }
+
+    private void startFlickerEffect(JLabel messageLabel) {
+        Timer timer = new Timer(500, null); // Flicker every 500ms
+        final boolean[] visible = {true};
+        
+        timer.addActionListener(e -> {
+            if(visible[0]) {
+                // Show with white color
+                messageLabel.setText("<html>Reason: <br><br> A stickman was detected interfering with your hardware.<br><br><br>Error code: STICKMAN_HARDWARE_MALFUNCTION<br><br><br>You can restart, but the stickman probably rebuilt itself. <br><br><font color='white'>Press any key to restart.</font></html>");
+            } else {
+                // Hide by matching background color
+                messageLabel.setText("<html>Reason: <br><br> A stickman was detected interfering with your hardware.<br><br><br>Error code: STICKMAN_HARDWARE_MALFUNCTION<br><br><br>You can restart, but the stickman probably rebuilt itself. <br><br><font color='#0078D7'>Press any key to restart.</font></html>");
+            }
+            visible[0] = !visible[0];
+        });
+        
+        timer.start();
     }
 }

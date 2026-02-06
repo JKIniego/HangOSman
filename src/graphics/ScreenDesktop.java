@@ -8,6 +8,7 @@ import java.awt.Image;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonModel;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -17,9 +18,12 @@ public class ScreenDesktop extends JPanel {
     private Branding branding;
     private MainEngine mainEngine;
     private JButton selectedDesktopIcon = null;
-
+    private JPanel taskbar, desktopIconsPanel ;
     private WindowDecoder windowDecoder;
     private WindowStickman windowStickman;
+    private WindowDirections windowDirections;
+    private WindowSettings windowSettings;
+    private WindowRecycleBin windowRecycleBin;
 
     public ScreenDesktop(MainEngine mainEngine, Branding branding) {
         this.branding = branding;
@@ -54,13 +58,30 @@ public class ScreenDesktop extends JPanel {
         windowStickman.setSize(windowStickman.getPreferredSize());
         windowStickman.setLocation(550, 70);
 
+        windowDirections = new WindowDirections(mainEngine, branding);
+        windowDirections.setSize(windowDirections.getPreferredSize());
+        windowDirections.setLocation(70, 70);
+        
+        windowSettings = new WindowSettings(mainEngine, branding);
+        windowSettings.setSize(windowSettings.getPreferredSize());
+        windowSettings.setLocation(200, 150);
+
+        windowRecycleBin = new WindowRecycleBin(mainEngine, branding);
+        windowRecycleBin.setSize(windowRecycleBin.getPreferredSize());
+        windowRecycleBin.setLocation(350, 100);
+
         desktopWindows.add(windowDecoder, BorderLayout.CENTER);
         desktopWindows.add(windowStickman, BorderLayout.CENTER);
+        desktopWindows.add(windowDirections, BorderLayout.CENTER);
+        desktopWindows.add(windowSettings, BorderLayout.CENTER);
+        desktopWindows.add(windowRecycleBin, BorderLayout.CENTER);
+
+
         this.add(desktopWindows, BorderLayout.CENTER);
     }
 
     public void initializeDesktopIcons() {
-        JPanel desktopIconsPanel = new JPanel();
+        desktopIconsPanel = new JPanel();
         desktopIconsPanel.setOpaque(false);
         desktopIconsPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         desktopIconsPanel.setPreferredSize(new java.awt.Dimension(120, 0));
@@ -127,7 +148,8 @@ public class ScreenDesktop extends JPanel {
 
 
     public void initializeTaskbar() {
-        JPanel taskbar = new JPanel();
+        taskbar = new JPanel();
+        taskbar.setVisible(false);
         taskbar.setBackground(branding.windowColor);
         taskbar.setPreferredSize(new java.awt.Dimension(0, 45));
         taskbar.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(4, 0, 0, 0, branding.white), BorderFactory.createEmptyBorder(0, 10, 0, 0)));
@@ -143,7 +165,15 @@ public class ScreenDesktop extends JPanel {
 
         startButton.addActionListener(e -> {
             mainEngine.startButtonPressed("ScreenGameOver");
-            });
+        });
+        startButton.getModel().addChangeListener(e -> {
+            ButtonModel model = (ButtonModel) e.getSource();
+            if (model.isPressed()) {
+                branding.designButtonStartPressed(startButton);
+            } else {
+                branding.designButtonStart(startButton);
+            }
+        });
     }
     
     // Wallpaper Painting
@@ -155,8 +185,26 @@ public class ScreenDesktop extends JPanel {
         int y = (getHeight() - img.getHeight(this)) / 2;
         g.drawImage(img, x, y, this);
     }
-
+    
+    public JPanel getTaskbar(){
+        return taskbar;
+    }
+    public JPanel getDesktopIconsPanel(){
+        return desktopIconsPanel;
+    }
     public WindowDecoder getWindowDecoder() {
         return windowDecoder;
+    }
+    public WindowStickman getWindowStickman() {
+        return windowStickman;
+    }
+    public WindowDirections getWindowDirections() {
+        return windowDirections;
+    }
+    public WindowSettings getWindowSettings() {
+        return windowSettings;
+    }
+    public WindowRecycleBin getWindowRecycleBin() {
+        return windowRecycleBin;
     }
 }

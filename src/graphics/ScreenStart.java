@@ -6,6 +6,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
+import javax.swing.ButtonModel;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -22,8 +23,16 @@ public class ScreenStart extends JPanel {
         startButton.setIcon(branding.icoWindows);
         startButton.setPreferredSize(new java.awt.Dimension(100, 32));
         startButton.addActionListener(e -> {mainEngine.startButtonPressed("ScreenDesktop");});
-        branding.designButtonDefault(startButton);
-        startButton.setFont(branding.windowsFont2Small);
+        branding.designButtonStart(startButton);
+        
+        startButton.getModel().addChangeListener(e -> {
+            ButtonModel model = (ButtonModel) e.getSource();
+            if (model.isPressed()) {
+                branding.designButtonStartPressed(startButton);
+            } else {
+                branding.designButtonStart(startButton);
+            }
+        });
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(400, 0, 0, 0);
         add(startButton, gbc);

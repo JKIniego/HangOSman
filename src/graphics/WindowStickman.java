@@ -2,7 +2,6 @@ package graphics;
 
 import engine.MainEngine;
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -11,27 +10,23 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.KeyStroke;
-
 import javax.swing.border.Border;
 
 public class WindowStickman extends JPanel{
     private MainEngine mainEngine;
     private Branding branding;
-    private JPanel windowHeaderPanel, windowContentPanel, redactedWordPanel;
+    private JPanel windowHeaderPanel, stickmanCanvas;
     private Point mouseDownCompCoords;
     public WindowStickman(MainEngine mainEngine, Branding branding){
         this.mainEngine = mainEngine;
@@ -39,9 +34,13 @@ public class WindowStickman extends JPanel{
 
         setBackground(branding.windowColor);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        
+        setVisible(false);
         setPreferredSize(new Dimension(400, 500));
-        setBorder(BorderFactory.createLineBorder(branding.white, 3));
+        Border white = BorderFactory.createLineBorder(branding.white, 3);
+        Border shadow = BorderFactory.createMatteBorder(0,0,5,5,branding.shadow);
+        Border border = BorderFactory.createCompoundBorder(shadow, white);
+        setBorder(border);
+        initializeListenerConsumer();
 
         initializeStickmanUI();
     }
@@ -85,6 +84,25 @@ public class WindowStickman extends JPanel{
         minimizeButton.setForeground(branding.black);
         minimizeButton.setPreferredSize(new Dimension(20, 20));
         minimizeButton.setFocusPainted(false);
+
+        JButton[] windowButtons = {closeButton, maximizeButton, minimizeButton};
+        for (JButton btn : windowButtons) {
+            btn.addActionListener(e -> {
+                    if (btn == minimizeButton || btn == closeButton){
+                        this.setVisible(false);
+                    } else if (btn == maximizeButton){
+                        // maximize window implementation
+                    }
+                });
+            btn.getModel().addChangeListener(e -> {
+                ButtonModel model = (ButtonModel) e.getSource();
+                if (model.isPressed()) {
+                    branding.designButtonDefaultPressed(btn);
+                } else {
+                    branding.designButtonDefault(btn);
+                }
+            });
+        }    
         
         branding.designButtonDefault(closeButton);
         branding.designButtonDefault(maximizeButton);
@@ -102,7 +120,7 @@ public class WindowStickman extends JPanel{
 
 
         // Window Panel
-        windowContentPanel = new JPanel();
+        JPanel windowContentPanel = new JPanel();
         windowContentPanel.setBackground(branding.windowColor); 
         windowContentPanel.setPreferredSize(new Dimension(100,100));
         windowContentPanel.setLayout(new BorderLayout());
@@ -157,8 +175,16 @@ public class WindowStickman extends JPanel{
             toolButtons[i] = new JButton(branding.icoTools[i]);
             toolButtons[i].setPreferredSize(new Dimension(25, 25));
             branding.designButtonFlat(toolButtons[i]);
-            toolButtons[i].setBackground(branding.gray4);
             toolsContainer.add(toolButtons[i]);
+            JButton btn = toolButtons[i];
+            btn.getModel().addChangeListener(e -> {
+                ButtonModel model = (ButtonModel) e.getSource();
+                if (model.isPressed()) {
+                    branding.designButtonFlatPressed(btn);
+                } else {
+                    branding.designButtonFlat(btn);
+                }
+            });
         }
         
         JPanel toolSpacePanel = new JPanel();
@@ -191,11 +217,10 @@ public class WindowStickman extends JPanel{
         windowContentPanel.add(toolsPanel, BorderLayout.WEST);
 
         // Stickman Canvas (center)
-        JPanel stickmanCanvas = new JPanel();
+        stickmanCanvas = new JPanel();
         stickmanCanvas.setForeground(branding.white);
         stickmanCanvas.setBorder(BorderFactory.createMatteBorder(7, 7, 3, 3, branding.gray3));
         stickmanCanvas.setLayout(new GridBagLayout());
-        stickmanCanvas.add(new JLabel(branding.imgHangman6));
 
         windowContentPanel.add(stickmanCanvas, BorderLayout.CENTER);
 
@@ -236,12 +261,15 @@ public class WindowStickman extends JPanel{
         
         windowContentPanel.add(scrollbar, BorderLayout.EAST);
 
-       
-
         // Window Dragging Logic
         windowHeaderPanel.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 mouseDownCompCoords = e.getPoint();
+                Container parent = getParent();
+                if(parent != null){
+                    parent.setComponentZOrder(WindowStickman.this, 0); // 0 = topmost layer
+                    parent.repaint();
+                }
             }
         });
         
@@ -273,5 +301,61 @@ public class WindowStickman extends JPanel{
 
         add(windowHeaderPanel);
         add(windowContentPanel);
+    }
+
+    public void updateStickmanStatus(int lives){
+        stickmanCanvas.removeAll();
+        ImageIcon newStickman;
+        switch (lives){
+            case 6 -> newStickman = branding.imgHangman6;
+            case 5 -> newStickman = branding.imgHangman5;
+            case 4 -> newStickman = branding.imgHangman4;
+            case 3 -> newStickman = branding.imgHangman3;
+            case 2 -> newStickman = branding.imgHangman2;
+            case 1 -> newStickman = branding.imgHangman1;
+            case 0 -> newStickman = branding.imgHangman0;
+            default -> newStickman = branding.imgHangman0;
+        }
+        stickmanCanvas.add(new JLabel(newStickman));
+        stickmanCanvas.revalidate();
+        stickmanCanvas.repaint();
+    }
+
+    public void initializeListenerConsumer(){
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Container parent = getParent();
+                if(parent != null){
+                    parent.setComponentZOrder(WindowStickman.this, 0);
+                    parent.repaint();
+                }
+                e.consume();
+            }
+            @Override
+            public void mousePressed(MouseEvent e) {
+                Container parent = getParent();
+                if(parent != null){
+                    parent.setComponentZOrder(WindowStickman.this, 0);
+                    parent.repaint();
+                }
+                e.consume();
+            }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                e.consume();
+            }
+        });
+        
+        this.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                e.consume();
+            }
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                e.consume();
+            }
+        });
     }
 }

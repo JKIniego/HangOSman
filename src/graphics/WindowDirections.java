@@ -2,57 +2,46 @@ package graphics;
 
 import engine.MainEngine;
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonModel;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.KeyStroke;
 import javax.swing.border.Border;
 
-public class WindowDecoder extends JPanel{
+public class WindowDirections extends JPanel{
     private MainEngine mainEngine;
     private Branding branding;
-    private JPanel windowHeaderPanel, windowContentPanel, redactedWordPanel;
+    private JPanel windowHeaderPanel;
     private Point mouseDownCompCoords;
-    private List<JButton> keyboardButtons;
-    public WindowDecoder(MainEngine mainEngine, Branding branding){
+    public WindowDirections(MainEngine mainEngine, Branding branding){
         this.mainEngine = mainEngine;
         this.branding = branding;
 
         setBackground(branding.windowColor);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setVisible(false);
-        setPreferredSize(new Dimension(400, 280));
+        setPreferredSize(new Dimension(900, 500));
         Border white = BorderFactory.createLineBorder(branding.white, 3);
         Border shadow = BorderFactory.createMatteBorder(0,0,5,5,branding.shadow);
         Border border = BorderFactory.createCompoundBorder(shadow, white);
-        setBorder(border);
+        setBorder(border); 
         initializeListenerConsumer();
 
-        initializeDecoderUI();
+        initializeStickmanUI();
     }
 
-    public void initializeDecoderUI(){
+    public void initializeStickmanUI(){
         // Header Panel
         windowHeaderPanel = new JPanel();
         windowHeaderPanel.setBackground(branding.blue1);
@@ -67,8 +56,8 @@ public class WindowDecoder extends JPanel{
         titlePanel.setBorder(BorderFactory.createEmptyBorder(3,2,2,2));
         titlePanel.setOpaque(false);
 
-        JLabel iconLabel = new JLabel(branding.resizeImageIcon(branding.icoComputer, 0.25f));
-        JLabel titleLabel = new JLabel("Decoder");
+        JLabel iconLabel = new JLabel(branding.resizeImageIcon(branding.icoDirections, 0.25f));
+        JLabel titleLabel = new JLabel("Directions");
         titleLabel.setFont(branding.windowsFontSmall);
         titleLabel.setForeground(branding.white);
         titlePanel.add(iconLabel);
@@ -91,6 +80,7 @@ public class WindowDecoder extends JPanel{
         minimizeButton.setForeground(branding.black);
         minimizeButton.setPreferredSize(new Dimension(20, 20));
         minimizeButton.setFocusPainted(false);
+
         JButton[] windowButtons = {closeButton, maximizeButton, minimizeButton};
         for (JButton btn : windowButtons) {
             btn.addActionListener(e -> {
@@ -108,7 +98,7 @@ public class WindowDecoder extends JPanel{
                     branding.designButtonDefault(btn);
                 }
             });
-        }
+        }    
         
         branding.designButtonDefault(closeButton);
         branding.designButtonDefault(maximizeButton);
@@ -126,98 +116,137 @@ public class WindowDecoder extends JPanel{
 
 
         // Window Panel
-        windowContentPanel = new JPanel();
+        JPanel windowContentPanel = new JPanel();
         windowContentPanel.setBackground(branding.windowColor); 
         windowContentPanel.setPreferredSize(new Dimension(100,100));
-        windowContentPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         windowContentPanel.setLayout(new BorderLayout());
+        windowContentPanel.setBorder(BorderFactory.createEmptyBorder(10,10,20,10));
 
-        // Words Display
-        JPanel decoderDisplayPanel = new JPanel();
-        decoderDisplayPanel.setBackground(branding.gray0);
-        decoderDisplayPanel.setBorder(BorderFactory.createLineBorder(branding.gray2, 5));
-        decoderDisplayPanel.setPreferredSize(new Dimension(0,50));
+        JPanel contentHeaderPanel = new JPanel();
+        JLabel contentHeaderLabel = new JLabel("How to Play");
+        contentHeaderLabel.setFont(branding.windowsFontMedium);
+        contentHeaderPanel.setOpaque(false);
+        contentHeaderPanel.add(contentHeaderLabel);
         
-        Border highlight = BorderFactory.createMatteBorder(0,0,3,3,branding.white);
-        Border grayShade = BorderFactory.createMatteBorder(3,3,0,0,branding.gray2);
-        Border innerShading = BorderFactory.createCompoundBorder(grayShade, highlight);
-        decoderDisplayPanel.setBorder(innerShading);
+        JPanel howToPlayPanel = new JPanel();
+        howToPlayPanel.setOpaque(false);
+        howToPlayPanel.setLayout(new GridLayout(1,3,20,0));
 
-        redactedWordPanel = new JPanel();
-        redactedWordPanel.setOpaque(false);
-        decoderDisplayPanel.add(redactedWordPanel);
+        JPanel col1Panel = new JPanel(new BorderLayout());
+        JPanel col2Panel = new JPanel(new BorderLayout());
+        JPanel col3Panel = new JPanel(new BorderLayout());
+        col1Panel.setOpaque(false);
+        col2Panel.setOpaque(false);
+        col3Panel.setOpaque(false);
 
-        windowContentPanel.add(decoderDisplayPanel, BorderLayout.NORTH);
+        JPanel step1APanelIndent = new JPanel();
+        JPanel step1BPanelIndent = new JPanel();
+        JPanel step2PanelIndent = new JPanel();
+        JPanel step3APanelIndent = new JPanel();
+        JPanel step3BPanelIndent = new JPanel();
+        step1APanelIndent.setLayout(new BorderLayout());
+        step1BPanelIndent.setLayout(new BorderLayout());
+        step2PanelIndent.setLayout(new BorderLayout());
+        step3APanelIndent.setLayout(new BorderLayout());
+        step3BPanelIndent.setLayout(new BorderLayout());
+        step1APanelIndent.setBackground(branding.gray0);
+        step1BPanelIndent.setBackground(branding.gray0);
+        step2PanelIndent.setBackground(branding.gray0);
+        step3APanelIndent.setBackground(branding.gray0);
+        step3BPanelIndent.setBackground(branding.gray0);
+        branding.designPanelBorderIndent(step1APanelIndent);
+        branding.designPanelBorderIndent(step1BPanelIndent);
+        branding.designPanelBorderIndent(step2PanelIndent);        
+        branding.designPanelBorderIndent(step3APanelIndent);
+        branding.designPanelBorderIndent(step3BPanelIndent);
 
-        // Keys Panel
-        JPanel decoderKeysPanel = new JPanel();
-        decoderKeysPanel.setLayout(new GridBagLayout());
-        decoderKeysPanel.setBackground(branding.windowColor);
+        JLabel step1aLabel = new JLabel("1. Guess the redacted word.");
+        JLabel step1bLabel = new JLabel("<html>Every wrong guess deducts a part of<br>the illustration and the letter is removed</htm>");
+        JLabel step2aLabel = new JLabel("2. Keep Mr. E intact.");
+        JLabel step2bLabel = new JLabel("<html>Do not let the man escape or else<br>he will destroy your computer.</html>");
+        JLabel step3aLabel = new JLabel("3. Win or Lose.");
+        JLabel step3bLabel = new JLabel("<html>Reveal the word and save the day.<br>Or lose and get your pc corrupted.</html>");
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(0, 0, 0, 0);
-        gbc.gridx = 0;
-        gbc.anchor = GridBagConstraints.CENTER;
+        JLabel step1aPic = new JLabel(branding.imgStep1a); 
+        JLabel step1a2Pic = new JLabel(branding.imgStep1a); 
+        JLabel step1bPic = new JLabel(branding.imgStep1b);
+        JLabel step2Pic = new JLabel(branding.imgStep2);
+        JLabel step3aPic = new JLabel(branding.imgStep3a);
+        JLabel step3bPic = new JLabel(branding.imgStep3b);
+        step1aPic.setBorder(BorderFactory.createEmptyBorder(10,10,30,10));
+        step1a2Pic.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        step1bPic.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        step2Pic.setBorder(BorderFactory.createEmptyBorder(0,10,10,10));        
+        step3aPic.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        step3bPic.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
-        // 2D array for keyboard layout
-        String[][] keyboardLayout = {
-            {"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"},
-            {"A", "S", "D", "F", "G", "H", "J", "K", "L"},
-            {"Z", "X", "C", "V", "B", "N", "M"},
-            {" "}
-        };
-        keyboardButtons = new ArrayList<JButton>();
+
+        step1aLabel.setFont(branding.windowsFontMedium);
+        step2aLabel.setFont(branding.windowsFontMedium);
+        step3aLabel.setFont(branding.windowsFontMedium);
+        step1aLabel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        step2aLabel.setBorder(BorderFactory.createEmptyBorder(10,10,5,10));
+        step3aLabel.setBorder(BorderFactory.createEmptyBorder(10,10,0,10));
+        step1bLabel.setFont(branding.windowsFontMedium);
+        step2bLabel.setFont(branding.windowsFontMedium);
+        step3bLabel.setFont(branding.windowsFontMedium);
+
+        step1APanelIndent.setPreferredSize(new Dimension(0,90));
+        step1APanelIndent.add(step1aLabel, BorderLayout.NORTH);
+        step1APanelIndent.add(step1aPic, BorderLayout.CENTER);
+
+        step1BPanelIndent.setPreferredSize(new Dimension(0,230));
+        JPanel containter = new JPanel();
+        JPanel containerIndent = new JPanel(new GridBagLayout());
+        branding.designPanelBorderIndent(containerIndent);
+        containerIndent.add(step1a2Pic);
+        containerIndent.setBackground(branding.gray1);
+        containerIndent.setPreferredSize(new Dimension(230,50));
+        containter.setBorder(BorderFactory.createEmptyBorder(10,0,0,0));
+        containter.setOpaque(false);
+        containter.add(containerIndent);
+        step1BPanelIndent.add(containter, BorderLayout.NORTH);
+        step1BPanelIndent.add(step1bPic, BorderLayout.CENTER);
+
+        step2PanelIndent.add(step2aLabel, BorderLayout.NORTH);
+        step2PanelIndent.add(step2Pic, BorderLayout.CENTER);
+
+        JPanel containter2 = new JPanel();
+        JPanel containerIndent2 = new JPanel(new GridBagLayout());
+        branding.designPanelBorderIndent(containerIndent2);
+        containerIndent2.add(step3aPic);
+        containerIndent2.setBackground(branding.blue1);
+        containerIndent2.setPreferredSize(new Dimension(230,65));
+        containter2.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
+        containter2.setOpaque(false);
+        containter2.add(containerIndent2);
+        step3APanelIndent.setPreferredSize(new Dimension(0,130));
+        step3APanelIndent.add(step3aLabel, BorderLayout.NORTH);
+        step3APanelIndent.add(containter2, BorderLayout.CENTER);
+        step3BPanelIndent.add(step3bPic, BorderLayout.CENTER);
+
+
+        col1Panel.add(step1APanelIndent, BorderLayout.NORTH);
+        col1Panel.add(step1bLabel, BorderLayout.CENTER);
+        col1Panel.add(step1BPanelIndent, BorderLayout.SOUTH);
+
+        col2Panel.add(step2PanelIndent, BorderLayout.NORTH);
+        col2Panel.add(step2bLabel, BorderLayout.CENTER);
+
+        col3Panel.add(step3APanelIndent, BorderLayout.NORTH);
+        col3Panel.add(step3bLabel, BorderLayout.CENTER);
+        col3Panel.add(step3BPanelIndent, BorderLayout.SOUTH);
         
-        for (int row = 0; row < keyboardLayout.length; row++) {
-            JPanel rowPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 3, 1));
-            rowPanel.setBackground(branding.windowColor);
-            
-            for (int col = 0; col < keyboardLayout[row].length; col++) {
-                char key = keyboardLayout[row][col].charAt(0);
-                JButton btn = new JButton(keyboardLayout[row][col]);
-                btn.setPreferredSize(new Dimension(30, 40));
-                branding.designButtonDefault(btn);
-                keyboardButtons.add(btn);
-                if (keyboardLayout[row][col].equals(" ")) {
-                    btn.setPreferredSize(new Dimension(170, 30));
-                }
-                
-                btn.addActionListener(e -> {
-                    mainEngine.decoderButtonPressed(key);
-                    btn.setEnabled(false);
-                    branding.designButtonDefaultPressed(btn);
-                });
-                btn.getModel().addChangeListener(e -> {
-                    ButtonModel model = (ButtonModel) e.getSource();
-                    if (model.isEnabled()) {
-                        if (model.isPressed()) {
-                            branding.designButtonDefaultPressed(btn);
-                        } else {
-                            branding.designButtonDefault(btn);
-                        }
-                    }
-                });
 
-                String keyString = keyboardLayout[row][col].equals(" ") ? " " : String.valueOf(key);
-                int keyCode = keyboardLayout[row][col].equals(" ") ? KeyEvent.VK_SPACE : KeyEvent.getExtendedKeyCodeForChar(key);
-                
-                btn.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
-                    KeyStroke.getKeyStroke(keyCode, 0), "pressed_" + keyString);
-                btn.getActionMap().put("pressed_" + keyString, new AbstractAction() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        btn.doClick();
-                    }
-                });
+        howToPlayPanel.add(col1Panel);
+        howToPlayPanel.add(col2Panel);
+        howToPlayPanel.add(col3Panel);
+        
 
-                rowPanel.add(btn);
-            }
-            
-            gbc.gridy = row;
-            decoderKeysPanel.add(rowPanel, gbc);
-        }
 
-        windowContentPanel.add(decoderKeysPanel, BorderLayout.CENTER);
+
+        windowContentPanel.add(contentHeaderPanel, BorderLayout.NORTH);
+        windowContentPanel.add(howToPlayPanel, BorderLayout.CENTER);
 
         // Window Dragging Logic
         windowHeaderPanel.addMouseListener(new MouseAdapter() {
@@ -225,7 +254,7 @@ public class WindowDecoder extends JPanel{
                 mouseDownCompCoords = e.getPoint();
                 Container parent = getParent();
                 if(parent != null){
-                    parent.setComponentZOrder(WindowDecoder.this, 0); // 0 = topmost layer
+                    parent.setComponentZOrder(WindowDirections.this, 0); // 0 = topmost layer
                     parent.repaint();
                 }
             }
@@ -261,44 +290,6 @@ public class WindowDecoder extends JPanel{
         add(windowContentPanel);
     }
 
-    public void newRedactedWord(String redactedWord){
-        redactedWordPanel.removeAll();
-        int numLetters = redactedWord.length();
-        redactedWordPanel.setLayout(new GridLayout(1, numLetters, 5, 0));
-        for (int i = 0; i < numLetters; i++) {
-            JLabel letterLabel = new JLabel(" ", JLabel.CENTER);
-            letterLabel.setPreferredSize(new Dimension(20, 30));
-            letterLabel.setBackground(branding.black);
-            letterLabel.setOpaque(true);
-            redactedWordPanel.add(letterLabel);
-        }
-        resetKeyboardButtons();
-        redactedWordPanel.revalidate();
-        redactedWordPanel.repaint();
-    }
-
-    public void revealLetter(String redactedWord, char letter){
-        if (redactedWordPanel.getComponentCount() == 0) return;
-        Component[] labels = redactedWordPanel.getComponents();
-        for (int i = 0; i < redactedWord.length(); i++) {
-            if (redactedWord.charAt(i) == letter) {
-                JLabel letterLabel = (JLabel) labels[i];
-                letterLabel.setOpaque(false);
-                letterLabel.setFont(branding.windowsFont2Small);
-                letterLabel.setForeground(branding.black);
-                Border underline = BorderFactory.createMatteBorder(0, 0, 2, 0, branding.black);
-                letterLabel.setBorder(underline);
-                letterLabel.setText(String.valueOf(letter).toUpperCase());
-            }
-        }
-    }
-
-    public void resetKeyboardButtons(){
-        for(JButton btn : keyboardButtons){
-            branding.designButtonDefault(btn);
-            btn.setEnabled(true);
-        }
-    }
 
     public void initializeListenerConsumer(){
         this.addMouseListener(new MouseAdapter() {
@@ -306,7 +297,7 @@ public class WindowDecoder extends JPanel{
             public void mouseClicked(MouseEvent e) {
                 Container parent = getParent();
                 if(parent != null){
-                    parent.setComponentZOrder(WindowDecoder.this, 0);
+                    parent.setComponentZOrder(WindowDirections.this, 0);
                     parent.repaint();
                 }
                 e.consume();
@@ -315,7 +306,7 @@ public class WindowDecoder extends JPanel{
             public void mousePressed(MouseEvent e) {
                 Container parent = getParent();
                 if(parent != null){
-                    parent.setComponentZOrder(WindowDecoder.this, 0);
+                    parent.setComponentZOrder(WindowDirections.this, 0);
                     parent.repaint();
                 }
                 e.consume();
@@ -337,5 +328,7 @@ public class WindowDecoder extends JPanel{
             }
         });
     }
-    
+
+
+
 }

@@ -8,7 +8,7 @@ import graphics.MainGUI;
 public class MainEngine {
     private MainGUI gui;
     private Data data;
-    public String randomWord;
+    public String wordToGuess;
 
     public MainEngine(){
         this.data = new Data();
@@ -20,20 +20,35 @@ public class MainEngine {
         getRandomRedactedWord();
     }
 
+    public void gameOver(){
+        gui.changeScreen("ScreenGameOver");
+        gui.openWindows("Clear All");
+    }
+
     public void decoderButtonPressed(char key){
         System.out.println("@ Decoder Button Pressed: " + key);
-        gui.revealLetterInDecoder(randomWord, key);
+        if (wordToGuess.toUpperCase().contains(String.valueOf(key).toUpperCase())) {
+            gui.revealLetterInDecoder(wordToGuess, key);
+        } else {
+            data.setLives(data.getLives() - 1);
+            gui.updateStickmanStatus(data.getLives());
+            if (data.getLives() <= 0){
+                gameOver();
+            }
+        }
     }
 
     public void desktopIconsPressed(String iconName){
         System.out.println("@ Desktop Icon Pressed: " + iconName);
         if (iconName.equals("Play")){
             // For now, just refreshes the redacted word, but it shall open the window
-            // gui.OpenPlay(); Future method to be implemented
             System.out.println("@ Refreshing Redacted Word...");
             getRandomRedactedWord();
-            gui.newRedactedWord(randomWord);
+            data.setLives(6);
+            gui.renderNewRedactedWord(wordToGuess);
+            gui.updateStickmanStatus(data.getLives());
         }
+        gui.openWindows(iconName);
     }
 
     public void startButtonPressed(String screenName){
@@ -41,19 +56,17 @@ public class MainEngine {
             gui.changeScreen(screenName);
         } else if (screenName.equals("ScreenStart")){
             gui.changeScreen(screenName);
-        } else if (screenName.equals("ScreenGameOver")){
-            gui.changeScreen(screenName);
         }
 
         // Future functionality for real start menu can be added here, 
-        // for now it just changes to the desktop/end screen
+        // for now it does nothing on desktop
         System.out.println("@ Start Button Pressed");
     }
 
     public void getRandomRedactedWord(){
-        int randomIndex = (int)(Math.random() * data.tempWords.length);
-        randomWord = data.tempWords[randomIndex];
-        System.out.println("@ Random Redacted Word: " + randomWord);
+        int randomIndex = (int)(Math.random() * data.getTempWords().length);
+        wordToGuess = data.getTempWords()[randomIndex];
+        System.out.println("@ Random Redacted Word: " + wordToGuess);
     }
 
     public void setGUI(MainGUI gui) {
