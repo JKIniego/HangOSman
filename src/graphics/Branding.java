@@ -6,6 +6,7 @@ import java.awt.FontFormatException;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.event.MouseAdapter;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -15,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
+import org.w3c.dom.events.MouseEvent;
 
 public class Branding {
     public Font windowsFontExtraSmall, windowsFontSmall, windowsFontMedium, windowsFontLarge, windowsFontExtraLarge, windowsFontGiant;
@@ -44,6 +46,8 @@ public class Branding {
     public Color gray4 = Color.decode("#C0C0C0");
     public Color shadow = Color.decode("#444444");
     public Color blue1 = Color.decode("#000080");
+    public Color iconHover = Color.decode("#47a0a0");
+    public Color iconBorder = Color.decode("#74c4c4");
 
     // Basic Colors
     public Color black = Color.decode("#000000");
@@ -294,5 +298,20 @@ public class Branding {
         Border combined = BorderFactory.createCompoundBorder(shadow, combined1);
         label.setBorder(combined);
         return label;
+    }
+
+    public void addButtonHoverEffect(JButton button) {
+        Color originalColor = button.getBackground();
+        
+        button.addMouseListener(new MouseAdapter() {
+            
+            public void mouseEntered(MouseEvent e) {
+                button.setBackground(blue);
+            }
+            
+            public void mouseExited(MouseEvent e) {
+                button.setBackground(originalColor);
+            }
+        });
     }
 }

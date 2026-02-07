@@ -118,9 +118,10 @@ public class ScreenDesktop extends JPanel {
         button.setToolTipText(text);
         button.setFont(branding.windowsFontSmall);
         button.setForeground(branding.white);
+        button.setBackground(branding.iconHover);
         // Borders
         Border emptyBorder = BorderFactory.createEmptyBorder(1, 1, 1, 1);
-        Border selectionBorder = BorderFactory.createLineBorder(branding.white, 1, true);
+        Border selectionBorder = BorderFactory.createLineBorder(branding.iconBorder, 1, true);
         button.setBorder(emptyBorder);
         button.setBorderPainted(true);
 
@@ -129,9 +130,16 @@ public class ScreenDesktop extends JPanel {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    // double-click detected
                     mainEngine.desktopIconsPressed(text);
                 }
+            }
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent e) {
+                button.setOpaque(true);
+            }
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent e) {
+                button.setOpaque(false);
             }
         });
 
