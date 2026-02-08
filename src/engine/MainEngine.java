@@ -64,8 +64,8 @@ public class MainEngine {
     }
 
     public void getRandomRedactedWord(){
-        int randomIndex = (int)(Math.random() * data.getTempWords().length);
-        wordToGuess = data.getTempWords()[randomIndex];
+        int randomIndex = (int)(Math.random() * data.getTempWords().size());
+        wordToGuess = data.getTempWords().get(randomIndex);
         System.out.println("@ Random Redacted Word: " + wordToGuess);
     }
 
