@@ -2,9 +2,13 @@ package graphics;
 
 import engine.MainEngine;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -13,6 +17,7 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
+
 
 public class ScreenDesktop extends JPanel {
     private Branding branding;
@@ -56,7 +61,7 @@ public class ScreenDesktop extends JPanel {
 
         windowStickman = new WindowStickman(mainEngine, branding);
         windowStickman.setSize(windowStickman.getPreferredSize());
-        windowStickman.setLocation(550, 70);
+        windowStickman.setLocation(590, 70);
 
         windowDirections = new WindowDirections(mainEngine, branding);
         windowDirections.setSize(windowDirections.getPreferredSize());
@@ -170,7 +175,19 @@ public class ScreenDesktop extends JPanel {
         branding.designButtonDefault(startButton);
         startButton.setFont(branding.windowsFont2Small);
         taskbar.add(startButton);
-
+        Color originalColor = startButton.getBackground();
+        startButton.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) {
+                if (!startButton.getModel().isPressed()) {
+                    startButton.setBackground(branding.gray1);
+                }
+            }
+            public void mouseExited(MouseEvent e) {
+                if (!startButton.getModel().isPressed()) {
+                    startButton.setBackground(originalColor);
+                }
+            }
+        });
         startButton.addActionListener(e -> {
             mainEngine.startButtonPressed("ScreenGameOver");
         });

@@ -2,6 +2,7 @@ package graphics;
 
 import engine.MainEngine;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -87,6 +88,19 @@ public class WindowStickman extends JPanel{
 
         JButton[] windowButtons = {closeButton, maximizeButton, minimizeButton};
         for (JButton btn : windowButtons) {
+            Color originalColor = btn.getBackground();
+            btn.addMouseListener(new MouseAdapter() {
+                public void mouseEntered(MouseEvent e) {
+                    if (!btn.getModel().isPressed()) {
+                        btn.setBackground(branding.gray1);
+                    }
+                }
+                public void mouseExited(MouseEvent e) {
+                    if (!btn.getModel().isPressed()) {
+                        btn.setBackground(originalColor);
+                    }
+                }
+            });
             btn.addActionListener(e -> {
                     if (btn == minimizeButton || btn == closeButton){
                         this.setVisible(false);
@@ -177,6 +191,19 @@ public class WindowStickman extends JPanel{
             branding.designButtonFlat(toolButtons[i]);
             toolsContainer.add(toolButtons[i]);
             JButton btn = toolButtons[i];
+            Color originalColor = btn.getBackground();
+            btn.addMouseListener(new MouseAdapter() {
+                public void mouseEntered(MouseEvent e) {
+                    if (!btn.getModel().isPressed()) {
+                        btn.setBackground(branding.gray1);
+                    }
+                }
+                public void mouseExited(MouseEvent e) {
+                    if (!btn.getModel().isPressed()) {
+                        btn.setBackground(originalColor);
+                    }
+                }
+            });
             btn.getModel().addChangeListener(e -> {
                 ButtonModel model = (ButtonModel) e.getSource();
                 if (model.isPressed()) {

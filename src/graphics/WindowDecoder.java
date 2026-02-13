@@ -2,6 +2,7 @@ package graphics;
 
 import engine.MainEngine;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -42,7 +43,7 @@ public class WindowDecoder extends JPanel{
         setBackground(branding.windowColor);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setVisible(false);
-        setPreferredSize(new Dimension(400, 280));
+        setPreferredSize(new Dimension(480, 280));
         Border white = BorderFactory.createLineBorder(branding.white, 3);
         Border shadow = BorderFactory.createMatteBorder(0,0,5,5,branding.shadow);
         Border border = BorderFactory.createCompoundBorder(shadow, white);
@@ -93,6 +94,19 @@ public class WindowDecoder extends JPanel{
         minimizeButton.setFocusPainted(false);
         JButton[] windowButtons = {closeButton, maximizeButton, minimizeButton};
         for (JButton btn : windowButtons) {
+            Color originalColor = btn.getBackground();
+            btn.addMouseListener(new MouseAdapter() {
+                public void mouseEntered(MouseEvent e) {
+                    if (!btn.getModel().isPressed()) {
+                        btn.setBackground(branding.gray1);
+                    }
+                }
+                public void mouseExited(MouseEvent e) {
+                    if (!btn.getModel().isPressed()) {
+                        btn.setBackground(originalColor);
+                    }
+                }
+            });
             btn.addActionListener(e -> {
                     if (btn == minimizeButton || btn == closeButton){
                         this.setVisible(false);
@@ -129,7 +143,7 @@ public class WindowDecoder extends JPanel{
         windowContentPanel = new JPanel();
         windowContentPanel.setBackground(branding.windowColor); 
         windowContentPanel.setPreferredSize(new Dimension(100,100));
-        windowContentPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        windowContentPanel.setBorder(BorderFactory.createEmptyBorder(10,10,5,10));
         windowContentPanel.setLayout(new BorderLayout());
 
         // Words Display
@@ -153,6 +167,7 @@ public class WindowDecoder extends JPanel{
         JPanel decoderKeysPanel = new JPanel();
         decoderKeysPanel.setLayout(new GridBagLayout());
         decoderKeysPanel.setBackground(branding.windowColor);
+        decoderKeysPanel.setBorder(BorderFactory.createEmptyBorder(5,0,0,0));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(0, 0, 0, 0);
@@ -175,13 +190,25 @@ public class WindowDecoder extends JPanel{
             for (int col = 0; col < keyboardLayout[row].length; col++) {
                 char key = keyboardLayout[row][col].charAt(0);
                 JButton btn = new JButton(keyboardLayout[row][col]);
-                btn.setPreferredSize(new Dimension(30, 40));
+                btn.setPreferredSize(new Dimension(35, 40));
                 branding.designButtonDefault(btn);
                 keyboardButtons.add(btn);
                 if (keyboardLayout[row][col].equals(" ")) {
-                    btn.setPreferredSize(new Dimension(170, 30));
+                    btn.setPreferredSize(new Dimension(170, 32));
                 }
-                
+                Color originalColor = btn.getBackground();
+                btn.addMouseListener(new MouseAdapter() {
+                    public void mouseEntered(MouseEvent e) {
+                        if (btn.getModel().isEnabled()) {
+                            btn.setBackground(branding.gray1);
+                        }
+                    }
+                    public void mouseExited(MouseEvent e) {
+                        if (btn.getModel().isEnabled()) {
+                            btn.setBackground(originalColor);
+                        }
+                    }
+                });
                 btn.addActionListener(e -> {
                     mainEngine.decoderButtonPressed(key);
                     btn.setEnabled(false);
@@ -267,9 +294,17 @@ public class WindowDecoder extends JPanel{
         redactedWordPanel.setLayout(new GridLayout(1, numLetters, 5, 0));
         for (int i = 0; i < numLetters; i++) {
             JLabel letterLabel = new JLabel(" ", JLabel.CENTER);
-            letterLabel.setPreferredSize(new Dimension(20, 30));
+            letterLabel.setPreferredSize(new Dimension(17, 30));
             letterLabel.setBackground(branding.black);
             letterLabel.setOpaque(true);
+            letterLabel.addMouseListener(new MouseAdapter() {
+                    public void mouseEntered(MouseEvent e) {
+                        letterLabel.setBackground(branding.black1);
+                    }
+                    public void mouseExited(MouseEvent e) {
+                        letterLabel.setBackground(branding.black);
+                    }
+                });
             redactedWordPanel.add(letterLabel);
         }
         resetKeyboardButtons();

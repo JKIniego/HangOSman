@@ -52,9 +52,9 @@ public class ScreenStory extends JPanel {
                      + "C:\\> News headlines, there is a henious criminal on the run\n\n"
                      + "C:\\> After some time, reports said that the criminal commit suicide by hanging\n\n"
                      + "C:\\> However, many believed the criminal is still on the run...\n\n"
-                     + "C:\\> ...and his hideout is on the hills.\n\n"
+                     + "C:\\> ...and his hideout is said to be on the hills down south.\n\n"
                      + "C:\\> You are an FBI agent trying to find clues on the theory of the criminal's whereabouts.\n\n"
-                     + "C:\\> Your mission: Decode the words or face the consequences.\n\n"
+                     + "C:\\> Your mission: Decode the words or face the consequences.\n\n\n"
                      + "C:\\> Six lives. One chance.\n\n\n"
                      + "C:\\> Click anywhere to continue...";
         
