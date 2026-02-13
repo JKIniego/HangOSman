@@ -45,11 +45,15 @@ public class ScreenStory extends JPanel {
         storyText.setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
         
         // Placeholder story text
-        String story = "C:\\> SYSTEM BOOT INITIATED...\n\n"
-                     + "C:\\> LOADING HANGMAN PROTOCOL...\n\n"
-                     + "C:\\> WELCOME TO HANGOSMAN\n\n"
-                     + "C:\\> [STORY PLACEHOLDER]\n\n"
-                     + "C:\\> The year is 1995...\n"
+        String story = "C:\\> SYSTEM BOOT INITIATED...\n\n\n"
+                     + "C:\\> LOADING HANGMAN PROTOCOL...\n\n\n"
+                     + "C:\\> WELCOME TO HANGOSMAN\n\n\n"
+                     + "C:\\> The year is 1995...\n\n"
+                     + "C:\\> News headlines, there is a henious criminal on the run\n\n"
+                     + "C:\\> After some time, reports said that the criminal commit suicide by hanging\n\n"
+                     + "C:\\> However, many believed the criminal is still on the run...\n\n"
+                     + "C:\\> ...and his hideout is on the hills.\n\n"
+                     + "C:\\> You are an FBI agent trying to find clues on the theory of the criminal's whereabouts.\n\n"
                      + "C:\\> Your mission: Decode the words or face the consequences.\n\n"
                      + "C:\\> Six lives. One chance.\n\n\n"
                      + "C:\\> Click anywhere to continue...";
