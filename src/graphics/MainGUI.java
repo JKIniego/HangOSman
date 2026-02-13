@@ -19,6 +19,7 @@ public class MainGUI {
     private JPanel mainPanel;
     private Branding branding;
     private OverlayEffect overlay;
+    private ScreenStory scrnStory;
     private ScreenStart scrnStartScreen;
     private ScreenDesktop scrnDesktop;
     private ScreenGameOver scrnGameOver;
@@ -48,10 +49,12 @@ public class MainGUI {
         mainPanel.setBackground(Color.BLUE);
         mainPanel.setLayout(new CardLayout());
         
+        scrnStory = new ScreenStory(engine, branding);
         scrnStartScreen = new ScreenStart(engine, branding);
         scrnDesktop = new ScreenDesktop(engine, branding);
         scrnGameOver = new ScreenGameOver(engine, branding);
 
+        mainPanel.add(scrnStory, "ScreenStory");
         mainPanel.add(scrnStartScreen, "ScreenStart");
         mainPanel.add(scrnDesktop, "ScreenDesktop");
         mainPanel.add(scrnGameOver, "ScreenGameOver");
