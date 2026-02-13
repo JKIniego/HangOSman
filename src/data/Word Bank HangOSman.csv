@@ -1,10 +1,12 @@
 access
+address space
 algorithm
 allocation
 Android
 architecture
+archive
 authentication
-Basic Input Output System
+batch
 biometrics
 Blackberry
 boot
@@ -12,8 +14,6 @@ buffer
 bus
 cache
 capacity
-central processing unit
-character user interface
 ChromeOS
 clock
 cloud
@@ -22,19 +22,19 @@ data
 deadlock
 device
 device reservation
+direct access
 direct memory access
 directory
 disk
-Disk Operating System
 dynamic
 emulation
 error detection
 error handling
+executable
 file management
 file system
 fragmentation
 free memory
-graphical user interface
 graphics
 hardware
 hierarchy
@@ -43,7 +43,6 @@ icons
 implementation
 input
 internet
-interprocess communication
 interrupt
 intranet
 iOS
@@ -51,17 +50,18 @@ issues
 Job Control Language
 kernel
 keyboard
-Light Weighted Process
+library
 Linux
-logical address space
 MacOS
 main memory
 management
 memory
+memory hierarchy
 menus
 migration
 monitor
 mouse
+multimedia
 multiprocessor
 multiprogramming
 multithread
@@ -69,20 +69,20 @@ multiuser
 mutex
 networking
 nonvolatile storage
+object
 operating system
 orthogonality
 output
+page
 paging
 partition
 password
 performance
 Peterson’s Solution
-physical address space
 pointer
 polling
+print or view
 process
-process control block
-process synchronization
 processor
 protection
 queue
@@ -96,11 +96,13 @@ scheduling
 security
 segmentation
 semaphore
+sequential access
 shell
 smartphone
 socket
 software
 Solid State Drive
+source code
 spool
 stack
 starvation
@@ -112,6 +114,7 @@ system load
 system program
 task control block
 termination
+text
 thrasing
 thread
 throughput
@@ -119,8 +122,10 @@ timer
 trap
 UNIX
 user
+virtual address
 virtual machine
 virtual memory
 virtualization
 Windows
+word processor
 yield
