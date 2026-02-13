@@ -59,7 +59,7 @@ public class Branding {
     public void initializeFonts(){
         System.out.println("Loading Fonts...");
         try {
-            Font windowsFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/graphics/assets/fonts/Windows-Regular.ttf"));
+            Font windowsFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/assets/fonts/Windows-Regular.ttf"));
             windowsFontExtraSmall = windowsFont.deriveFont(Font.BOLD, 10f);
             windowsFontSmall = windowsFont.deriveFont(Font.BOLD, 14f);
             windowsFontMedium = windowsFont.deriveFont(Font.BOLD, 16f);
@@ -67,7 +67,7 @@ public class Branding {
             windowsFontExtraLarge = windowsFont.deriveFont(Font.BOLD, 32f);
             windowsFontGiant = windowsFont.deriveFont(Font.BOLD, 200f);
 
-            Font windowsFont2 = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/graphics/assets/fonts/pixelmix_bold.ttf"));
+            Font windowsFont2 = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/assets/fonts/pixelmix_bold.ttf"));
             windowsFont2ExtraSmall = windowsFont2.deriveFont(Font.PLAIN, 10f);
             windowsFont2Small = windowsFont2.deriveFont(Font.PLAIN, 14f);
             windowsFont2Medium = windowsFont2.deriveFont(Font.PLAIN, 16f);
@@ -81,31 +81,31 @@ public class Branding {
     public void initializeImages(){
         System.out.println("Loading Images...");
         try {
-            BufferedImage buff_imgWindows67 = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/images/windows67.png"));
+            BufferedImage buff_imgWindows67 = ImageIO.read(getClass().getResourceAsStream("/assets/images/windows67.png"));
             
-            BufferedImage buff_imgStep1a = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/images/step1a.png"));
-            BufferedImage buff_imgStep1b = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/images/step1b.png"));
-            BufferedImage buff_imgStep2 = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/images/step2.png"));
-            BufferedImage buff_imgStep3a = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/images/step3a.png"));
-            BufferedImage buff_imgStep3b = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/images/step3b.png"));
+            BufferedImage buff_imgStep1a = ImageIO.read(getClass().getResourceAsStream("/assets/images/step1a.png"));
+            BufferedImage buff_imgStep1b = ImageIO.read(getClass().getResourceAsStream("/assets/images/step1b.png"));
+            BufferedImage buff_imgStep2 = ImageIO.read(getClass().getResourceAsStream("/assets/images/step2.png"));
+            BufferedImage buff_imgStep3a = ImageIO.read(getClass().getResourceAsStream("/assets/images/step3a.png"));
+            BufferedImage buff_imgStep3b = ImageIO.read(getClass().getResourceAsStream("/assets/images/step3b.png"));
             
-            BufferedImage buff_imgHangman6 = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/images/hangman6.png"));
-            BufferedImage buff_imgHangman5 = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/images/hangman5.png"));
-            BufferedImage buff_imgHangman4 = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/images/hangman4.png"));
-            BufferedImage buff_imgHangman3 = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/images/hangman3.png"));
-            BufferedImage buff_imgHangman2 = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/images/hangman2.png"));
-            BufferedImage buff_imgHangman1 = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/images/hangman1.png"));
-            BufferedImage buff_imgHangman0 = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/images/hangman0.png"));
+            BufferedImage buff_imgHangman6 = ImageIO.read(getClass().getResourceAsStream("/assets/images/hangman6.png"));
+            BufferedImage buff_imgHangman5 = ImageIO.read(getClass().getResourceAsStream("/assets/images/hangman5.png"));
+            BufferedImage buff_imgHangman4 = ImageIO.read(getClass().getResourceAsStream("/assets/images/hangman4.png"));
+            BufferedImage buff_imgHangman3 = ImageIO.read(getClass().getResourceAsStream("/assets/images/hangman3.png"));
+            BufferedImage buff_imgHangman2 = ImageIO.read(getClass().getResourceAsStream("/assets/images/hangman2.png"));
+            BufferedImage buff_imgHangman1 = ImageIO.read(getClass().getResourceAsStream("/assets/images/hangman1.png"));
+            BufferedImage buff_imgHangman0 = ImageIO.read(getClass().getResourceAsStream("/assets/images/hangman0.png"));
             
-            BufferedImage buff_icoWindowsIcon = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/icons/windows-0.png"));
-            BufferedImage buff_icoRecycleBinIcon = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/icons/recycle_bin.png"));
-            BufferedImage buff_icoComputerIcon = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/icons/computer.png"));
-            BufferedImage buff_icoDirectionsIcon = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/icons/directions.png"));
-            BufferedImage buff_icoSettingsIcon = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/icons/settings.png"));
+            BufferedImage buff_icoWindowsIcon = ImageIO.read(getClass().getResourceAsStream("/assets/icons/windows-0.png"));
+            BufferedImage buff_icoRecycleBinIcon = ImageIO.read(getClass().getResourceAsStream("/assets/icons/recycle_bin.png"));
+            BufferedImage buff_icoComputerIcon = ImageIO.read(getClass().getResourceAsStream("/assets/icons/computer.png"));
+            BufferedImage buff_icoDirectionsIcon = ImageIO.read(getClass().getResourceAsStream("/assets/icons/directions.png"));
+            BufferedImage buff_icoSettingsIcon = ImageIO.read(getClass().getResourceAsStream("/assets/icons/settings.png"));
             
-            BufferedImage buff_icoWinMax = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/icons/winMax.png"));
-            BufferedImage buff_icoWinMin = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/icons/winMin.png"));
-            BufferedImage buff_icoWinClose = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/icons/winClose.png"));
+            BufferedImage buff_icoWinMax = ImageIO.read(getClass().getResourceAsStream("/assets/icons/winMax.png"));
+            BufferedImage buff_icoWinMin = ImageIO.read(getClass().getResourceAsStream("/assets/icons/winMin.png"));
+            BufferedImage buff_icoWinClose = ImageIO.read(getClass().getResourceAsStream("/assets/icons/winClose.png"));
 
             BufferedImage[] buffTools = new BufferedImage[16];
             String[] toolPaths = {
@@ -115,7 +115,7 @@ public class Branding {
                 "tool7-1.png", "tool7-2.png", "tool8-1.png", "tool8-2.png"
             };
             for (int i = 0; i < 16; i++) {
-                buffTools[i] = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/icons/" + toolPaths[i]));
+                buffTools[i] = ImageIO.read(getClass().getResourceAsStream("/assets/icons/" + toolPaths[i]));
                 icoTools[i] = resizeImage(buffTools[i], 0.4f);
             }
 

@@ -16,7 +16,7 @@ public class OverlayEffect extends JComponent {
         setEnabled(false);
 
         try {
-            image = ImageIO.read(getClass().getResourceAsStream("/graphics/assets/images/overlay4.png"));
+            image = ImageIO.read(getClass().getResourceAsStream("/assets/images/overlay4.png"));
         } catch (IOException e) {
             System.out.println("Overlay image not found: " + path);
         }
