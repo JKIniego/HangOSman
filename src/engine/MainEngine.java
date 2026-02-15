@@ -8,10 +8,12 @@ import graphics.MainGUI;
 public class MainEngine {
     private MainGUI gui;
     private Data data;
+    private AudioManager audioManager;
     public String wordToGuess;
 
     public MainEngine(){
         this.data = new Data();
+        this.audioManager = new AudioManager();
         start();
     }
 
@@ -71,5 +73,21 @@ public class MainEngine {
 
     public void setGUI(MainGUI gui) {
         this.gui = gui;
+    }
+
+    public void playSound(String soundName) {
+        if (soundName.equals("click")) {
+            audioManager.playButtonClick();
+        } else {
+            audioManager.playSound(soundName);
+        }
+    }
+
+    public void playMusic(String filename) {
+        audioManager.playMusic(filename);
+    }
+
+    public void stopMusic() {
+        audioManager.stopMusic();
     }
 }
