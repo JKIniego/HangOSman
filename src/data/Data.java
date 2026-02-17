@@ -1,16 +1,19 @@
 package data;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Data {
     private char[] alphabet;
     private String[] tempWords;
     private ArrayList<String> wordBank = new ArrayList<>();
+    private Set<Character> guessedLetters = new HashSet<>();
+    private int correct, wrong, percentage;
     private int lives;
 
     // Temporary only for GUI testing, will be removed when actual backend is implemented
@@ -25,6 +28,11 @@ public class Data {
 
         // Lives
         lives = 6;
+
+        //Stats counter
+        correct = 0;
+        wrong = 0;
+        percentage = 0;
     }
 
     public void extractWords() {
@@ -53,4 +61,36 @@ public class Data {
     // Getters
     public int getLives(){return lives;}
     public ArrayList<String> getTempWords(){return wordBank;}
+
+    public int getCorrect() {
+        return correct;
+    }
+
+    public void setCorrect(int correct) {
+        this.correct = correct;
+    }
+
+    public int getWrong() {
+        return wrong;
+    }
+
+    public void setWrong(int wrong) {
+        this.wrong = wrong;
+    }
+
+    public int getPercentage() {
+        return percentage;
+    }
+
+    public void setPercentage() {
+        //this.percentage = ((correct * 6)-wrong)/correct*(correct*6);
+    }
+
+    public Set<Character> getGuessedLetters() {
+        return guessedLetters;
+    }
+
+    public void setGuessedLetters(Set<Character> guessedLetters) {
+        this.guessedLetters = guessedLetters;
+    }
 }

@@ -176,6 +176,15 @@ public class MainGUI {
         }
     }
 
+    public void updateStatistics(){
+        if (scrnDesktop != null) {
+            WindowRecycleBin recycleBin = scrnDesktop.getWindowRecycleBin();
+            if (recycleBin != null) {
+                recycleBin.refreshStatDisplay();;
+            }
+        }
+    }
+
     public void changeScreen(String screenName){
         CardLayout cl = (CardLayout)(mainPanel.getLayout());
         cl.show(mainPanel, screenName);
@@ -195,6 +204,7 @@ public class MainGUI {
             WindowDirections directions = scrnDesktop.getWindowDirections();
             WindowSettings settings = scrnDesktop.getWindowSettings();
             WindowRecycleBin recycleBin = scrnDesktop.getWindowRecycleBin();
+            WindowLeak leak = scrnDesktop.getWindowLeak();
             
             if(iconName.equals("Play")){
                 if(decoder.isVisible() && stickman.isVisible()){
@@ -227,13 +237,22 @@ public class MainGUI {
                     popIn(recycleBin);
                 }
                 bringToFront(recycleBin);
+            } else if (iconName.equals("Leak")){
+                if(leak.isVisible()){
+                    flickerBorder(leak);
+                }else{
+                    popIn(leak);
+                    flickerBorder(leak);
+                }
+                bringToFront(leak);
             } else if (iconName.equals("Clear All")) {
                 decoder.setVisible(false);
                 stickman.setVisible(false);
                 directions.setVisible(false);
                 settings.setVisible(false);
                 recycleBin.setVisible(false);
-            }
+                leak.setVisible(false);
+            } 
         }
     }
 

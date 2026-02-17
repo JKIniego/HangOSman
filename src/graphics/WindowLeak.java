@@ -19,13 +19,13 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
-public class WindowRecycleBin extends JPanel{
+public class WindowLeak extends JPanel{
     private MainEngine mainEngine;
     private Branding branding;
     private JPanel windowHeaderPanel, statsContainter;
     private Point mouseDownCompCoords;
 
-    public WindowRecycleBin(MainEngine mainEngine, Branding branding){
+    public WindowLeak(MainEngine mainEngine, Branding branding){
         this.mainEngine = mainEngine;
         this.branding = branding;
 
@@ -57,8 +57,8 @@ public class WindowRecycleBin extends JPanel{
         titlePanel.setBorder(BorderFactory.createEmptyBorder(3,2,2,2));
         titlePanel.setOpaque(false);
 
-        JLabel iconLabel = new JLabel(branding.resizeImageIcon(branding.icoRecycleBin, 0.25f));
-        JLabel titleLabel = new JLabel("Recycle Bin");
+        JLabel iconLabel = new JLabel(branding.resizeImageIcon(branding.icoLeak, 0.25f));
+        JLabel titleLabel = new JLabel("Leak Word");
         titleLabel.setFont(branding.windowsFontSmall);
         titleLabel.setForeground(branding.white);
         titlePanel.add(iconLabel);
@@ -136,19 +136,92 @@ public class WindowRecycleBin extends JPanel{
         windowContentPanel.setLayout(new BorderLayout());
         windowContentPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
-        JLabel statsLabel = new JLabel("Session Statistics");
-        statsLabel.setFont(branding.windowsFontMedium);
-        statsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        // Main content container
+        JPanel messagePanel = new JPanel();
+        messagePanel.setBackground(branding.windowColor);
+        messagePanel.setBorder(BorderFactory.createEmptyBorder(10,20,0,0));
+        messagePanel.setLayout(new BorderLayout(10, 10));
 
-        statsContainter = new JPanel();
-        statsContainter.setBackground(branding.gray1);
-        statsContainter.setLayout(new BoxLayout(statsContainter, BoxLayout.Y_AXIS));
-        branding.designPanelBorderIndent(statsContainter);
+        // Left icon (green check)
+        JLabel successIcon = new JLabel(branding.icoCheck);
+        successIcon.setVerticalAlignment(SwingConstants.TOP);
+        messagePanel.add(successIcon, BorderLayout.WEST);
 
-        refreshStatDisplay();
+        // Text container
+        JPanel textPanel = new JPanel();
+        textPanel.setBackground(branding.windowColor);
+        textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
 
-        windowContentPanel.add(statsLabel, BorderLayout.NORTH);
-        windowContentPanel.add(statsContainter, BorderLayout.CENTER);
+        JLabel titleLabelSuccess = new JLabel("Congratulations!");
+        titleLabelSuccess.setFont(branding.windowsFontLarge);
+        titleLabelSuccess.setForeground(branding.black);
+
+        JLabel messageLabel = new JLabel("You successfully leaked the word!");
+        messageLabel.setFont(branding.windowsFontSmall);
+        messageLabel.setForeground(branding.black);
+
+        textPanel.add(titleLabelSuccess);
+        textPanel.add(messageLabel);
+
+        messagePanel.add(textPanel, BorderLayout.CENTER);
+
+        // Buttons panel
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
+        buttonPanel.setBackground(branding.windowColor);
+
+        JButton exitButton = new JButton("Exit");
+        JButton newWordButton = new JButton("New Word");
+
+        // Put buttons in an array
+        JButton[] buttons = {exitButton, newWordButton};
+
+        // Apply common styling to all buttons
+        for (JButton button : buttons) {
+            button.setPreferredSize(new Dimension(100, 25));
+            branding.designButtonStart(button);
+            button.setFont(branding.windowsFontSmall);
+            
+            // Store original color for this button
+            Color originalColor = button.getBackground();
+            
+            // Add hover effect
+            button.addMouseListener(new MouseAdapter() {
+                public void mouseEntered(MouseEvent e) {
+                    if (!button.getModel().isPressed()) {
+                        button.setBackground(branding.gray1);
+                    }
+                }
+                public void mouseExited(MouseEvent e) {
+                    if (!button.getModel().isPressed()) {
+                        button.setBackground(originalColor);
+                    }
+                }
+            });
+            button.getModel().addChangeListener(e -> {
+                ButtonModel model = (ButtonModel) e.getSource();
+                if (model.isPressed()) {
+                    branding.designButtonDefaultPressed(button);
+                } else {
+                    branding.designButtonDefault(button);
+                }
+            });
+        }
+
+        exitButton.addActionListener(e -> {
+            this.setVisible(false);
+        });
+
+        newWordButton.addActionListener(e -> {
+            mainEngine.newRound();
+            this.setVisible(false);
+        });
+
+        buttonPanel.add(exitButton);
+        buttonPanel.add(newWordButton);
+
+
+        windowContentPanel.add(messagePanel, BorderLayout.CENTER);
+        windowContentPanel.add(buttonPanel, BorderLayout.SOUTH);
         
         // Window Dragging Logic
         windowHeaderPanel.addMouseListener(new MouseAdapter() {
@@ -156,7 +229,7 @@ public class WindowRecycleBin extends JPanel{
                 mouseDownCompCoords = e.getPoint();
                 Container parent = getParent();
                 if(parent != null){
-                    parent.setComponentZOrder(WindowRecycleBin.this, 0); // 0 = topmost layer
+                    parent.setComponentZOrder(WindowLeak.this, 0); // 0 = topmost layer
                     parent.repaint();
                 }
             }
@@ -192,49 +265,13 @@ public class WindowRecycleBin extends JPanel{
         add(windowContentPanel);
     }
 
-    public void refreshStatDisplay() {
-        statsContainter.removeAll();
-
-        String stringLabels[] = {"Words Leaked: ", "Escaped Limbs: ", "Leak Percentage: "};
-        int stats[] = {
-            mainEngine.getData().getCorrect(), 
-            mainEngine.getData().getWrong(), 
-            mainEngine.getData().getPercentage()
-        };
-
-        for (int i = 0; i < stringLabels.length; i++) {
-            JPanel row = new JPanel();
-            row.setLayout(new BorderLayout());
-            row.setOpaque(false);
-            row.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-
-            JLabel label = new JLabel(stringLabels[i]);
-            label.setFont(branding.windowsFontSmall);
-            
-            String valueText = String.valueOf(stats[i]);
-            if (stringLabels[i].contains("Percentage")) {
-                valueText += "%";
-            }
-            
-            JLabel statLabel = new JLabel(valueText);
-            statLabel.setFont(branding.windowsFontSmall);
-
-            row.add(label, BorderLayout.WEST);
-            row.add(statLabel, BorderLayout.EAST);
-
-            statsContainter.add(row);
-        }
-        statsContainter.revalidate();
-        statsContainter.repaint();
-    }
-
     public void initializeListenerConsumer(){
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 Container parent = getParent();
                 if(parent != null){
-                    parent.setComponentZOrder(WindowRecycleBin.this, 0);
+                    parent.setComponentZOrder(WindowLeak.this, 0);
                     parent.repaint();
                 }
                 e.consume();
@@ -243,7 +280,7 @@ public class WindowRecycleBin extends JPanel{
             public void mousePressed(MouseEvent e) {
                 Container parent = getParent();
                 if(parent != null){
-                    parent.setComponentZOrder(WindowRecycleBin.this, 0);
+                    parent.setComponentZOrder(WindowLeak.this, 0);
                     parent.repaint();
                 }
                 e.consume();

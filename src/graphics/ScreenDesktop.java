@@ -3,7 +3,6 @@ package graphics;
 import engine.MainEngine;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -29,6 +28,7 @@ public class ScreenDesktop extends JPanel {
     private WindowDirections windowDirections;
     private WindowSettings windowSettings;
     private WindowRecycleBin windowRecycleBin;
+    private WindowLeak windowLeak;
 
     public ScreenDesktop(MainEngine mainEngine, Branding branding) {
         this.branding = branding;
@@ -75,11 +75,16 @@ public class ScreenDesktop extends JPanel {
         windowRecycleBin.setSize(windowRecycleBin.getPreferredSize());
         windowRecycleBin.setLocation(350, 100);
 
+        windowLeak = new WindowLeak(mainEngine, branding);
+        windowLeak.setSize(windowLeak.getPreferredSize());
+        windowLeak.setLocation(350, 300);
+
         desktopWindows.add(windowDecoder, BorderLayout.CENTER);
         desktopWindows.add(windowStickman, BorderLayout.CENTER);
         desktopWindows.add(windowDirections, BorderLayout.CENTER);
         desktopWindows.add(windowSettings, BorderLayout.CENTER);
         desktopWindows.add(windowRecycleBin, BorderLayout.CENTER);
+        desktopWindows.add(windowLeak, BorderLayout.CENTER);
 
 
         this.add(desktopWindows, BorderLayout.CENTER);
@@ -231,5 +236,8 @@ public class ScreenDesktop extends JPanel {
     }
     public WindowRecycleBin getWindowRecycleBin() {
         return windowRecycleBin;
+    }
+    public WindowLeak getWindowLeak() {
+        return windowLeak;
     }
 }

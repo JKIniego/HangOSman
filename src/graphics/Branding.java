@@ -20,7 +20,7 @@ public class Branding {
     public Font windowsFontExtraSmall, windowsFontSmall, windowsFontMedium, windowsFontLarge, windowsFontExtraLarge, windowsFontGiant;
     public Font windowsFont2ExtraSmall, windowsFont2Small, windowsFont2Medium, windowsFont2Large, windowsFont2ExtraLarge;
     public ImageIcon imgWindows67, imgHangman6, imgHangman5, imgHangman4, imgHangman3, imgHangman2, imgHangman1, imgHangman0;
-    public ImageIcon icoWindows, icoRecycleBin, icoComputer, icoDirections, icoSettings;
+    public ImageIcon icoWindows, icoRecycleBin, icoComputer, icoDirections, icoSettings, icoLeak, icoCheck;
     public ImageIcon imgStep1a, imgStep1b, imgStep2, imgStep3a, imgStep3b;
     public ImageIcon[] icoTools = new ImageIcon[16];
     public ImageIcon icoWinMax, icoWinMin, icoWinClose;
@@ -101,10 +101,13 @@ public class Branding {
             BufferedImage buff_icoComputerIcon = ImageIO.read(getClass().getResourceAsStream("/assets/icons/computer.png"));
             BufferedImage buff_icoDirectionsIcon = ImageIO.read(getClass().getResourceAsStream("/assets/icons/directions.png"));
             BufferedImage buff_icoSettingsIcon = ImageIO.read(getClass().getResourceAsStream("/assets/icons/settings.png"));
+            BufferedImage buff_icoLeakIcon = ImageIO.read(getClass().getResourceAsStream("/assets/icons/leaker.png"));
             
             BufferedImage buff_icoWinMax = ImageIO.read(getClass().getResourceAsStream("/assets/icons/winMax.png"));
             BufferedImage buff_icoWinMin = ImageIO.read(getClass().getResourceAsStream("/assets/icons/winMin.png"));
             BufferedImage buff_icoWinClose = ImageIO.read(getClass().getResourceAsStream("/assets/icons/winClose.png"));
+
+            BufferedImage buff_icoCheck = ImageIO.read(getClass().getResourceAsStream("/assets/icons/check.png"));
 
             BufferedImage[] buffTools = new BufferedImage[16];
             String[] toolPaths = {
@@ -144,6 +147,9 @@ public class Branding {
             icoComputer = resizeImage(buff_icoComputerIcon, 0.6f);
             icoDirections = resizeImage(buff_icoDirectionsIcon, 0.6f);
             icoSettings = resizeImage(buff_icoSettingsIcon, 0.6f);
+            icoLeak = resizeImage(buff_icoLeakIcon, 0.6f);
+
+            icoCheck = resizeImage(buff_icoCheck, 1f);
 
             //sampleGIF = new ImageIcon(getClass().getResource("image.gif"));
             //sampleGIF = resizeGIF(sampleGIF, 800, 150);
