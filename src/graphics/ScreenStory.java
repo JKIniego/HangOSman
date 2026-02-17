@@ -3,76 +3,151 @@ package graphics;
 import engine.MainEngine;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
+import java.awt.event.*;
+import java.util.ArrayList;
+import javax.swing.*;
 
 public class ScreenStory extends JPanel {
+
     private Branding branding;
     private MainEngine mainEngine;
     private JTextArea storyText;
+    private JButton skipButton;
+
+    private ArrayList<String> lines = new ArrayList<>();
+    private int currentLine = 0;
+    private int currentChar = 0;
+    private Timer typingTimer;
+    private boolean isTyping = false;
 
     public ScreenStory(MainEngine mainEngine, Branding branding) {
         this.branding = branding;
         this.mainEngine = mainEngine;
-        
+
         setBackground(Color.BLACK);
         setLayout(new BorderLayout());
-        
+
+        initializeStoryLines();
         initializeStoryText();
-        
-        // Click anywhere to continue
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                mainEngine.startButtonPressed("ScreenStart");
-            }
-        });
+        initializeSkipButton();
+        initializeKeyListener();
+
+        startTypingLine();
+    }
+
+    private void initializeStoryLines() {
+        lines.add("C:\\> SYSTEM BOOT INITIATED...");
+        lines.add("C:\\> LOADING HANGMAN PROTOCOL...");
+        lines.add("C:\\> WELCOME TO HANGOSMAN");
+        lines.add("C:\\> The year is 1995...");
+        lines.add("C:\\> News headlines, there is a heinous criminal on the run");
+        lines.add("C:\\> After some time, reports said that the criminal commited suicide by hanging");
+        lines.add("C:\\> However, many believe he is still alive...");
+        lines.add("C:\\> His files have been released but most are redacted.");
+        lines.add("C:\\> You are an FBI agent uncovering the files for clues.");
+        lines.add("C:\\> Your mission: Decode the words or face the consequences.");
+        lines.add("C:\\> Six lives. One chance.");
+        lines.add("");
+        lines.add("C:\\> Press any key to continue...");
     }
 
     private void initializeStoryText() {
         storyText = new JTextArea();
         storyText.setBackground(Color.BLACK);
-        storyText.setForeground(new Color(0, 255, 0)); // Green terminal text
+        storyText.setForeground(branding.green);
         storyText.setFont(branding.windowsFont2Medium);
         storyText.setEditable(false);
         storyText.setFocusable(false);
         storyText.setLineWrap(true);
         storyText.setWrapStyleWord(true);
         storyText.setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
-        
-        // Placeholder story text
-        String story = "C:\\> SYSTEM BOOT INITIATED...\n\n\n"
-                     + "C:\\> LOADING HANGMAN PROTOCOL...\n\n\n"
-                     + "C:\\> WELCOME TO HANGOSMAN\n\n\n"
-                     + "C:\\> The year is 1995...\n\n"
-                     + "C:\\> News headlines, there is a henious criminal on the run\n\n"
-                     + "C:\\> After some time, reports said that the criminal commit suicide by hanging\n\n"
-                     + "C:\\> However, many believed the criminal is still on the run...\n\n"
-                     + "C:\\> ...and his hideout is said to be on the hills down south.\n\n"
-                     + "C:\\> You are an FBI agent trying to find clues on the theory of the criminal's whereabouts.\n\n"
-                     + "C:\\> Your mission: Decode the words or face the consequences.\n\n\n"
-                     + "C:\\> Six lives. One chance.\n\n\n"
-                     + "C:\\> Click anywhere to continue...";
-        
-        storyText.setText(story);
-        
-        // Make clicks pass through to the panel
-        storyText.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                mainEngine.startButtonPressed("ScreenStart");
-            }
-        });
-        
+
         add(storyText, BorderLayout.CENTER);
     }
-    
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+
+    private void initializeSkipButton() {
+        JPanel bottomPanel = new JPanel(new BorderLayout());
+        bottomPanel.setBackground(Color.BLACK);
+
+        skipButton = new JButton("Skip >>");
+        skipButton.setFont(branding.windowsFontLarge);
+        skipButton.setForeground(branding.green);
+        skipButton.setOpaque(false);
+        skipButton.setContentAreaFilled(false);
+        skipButton.setBorderPainted(false);
+        skipButton.setFocusPainted(false);
+        skipButton.setBorder(BorderFactory.createEmptyBorder(0,0,40,70));
+
+        
+
+        skipButton.addActionListener(e -> {
+            typingTimer.stop();
+            mainEngine.startButtonPressed("ScreenStart");
+        });
+
+        JPanel rightPanel = new JPanel();
+        rightPanel.setBackground(Color.BLACK);
+        rightPanel.add(skipButton);
+
+        bottomPanel.add(rightPanel, BorderLayout.EAST);
+        add(bottomPanel, BorderLayout.SOUTH);
+    }
+
+    private void initializeKeyListener() {
+        setFocusable(true);
+        requestFocusInWindow();
+
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+                if (isTyping) {
+                    typingTimer.stop();
+
+                    String fullLine = lines.get(currentLine);
+
+                    // Remove partially typed line
+                    int textLength = storyText.getText().length();
+                    storyText.setText(
+                        storyText.getText().substring(0, textLength - currentChar)
+                    );
+
+                    // Add full correct line
+                    storyText.append(fullLine + "\n\n");
+
+                    isTyping = false;
+                } else {
+                    // Move to next line
+                    currentLine++;
+                    if (currentLine >= lines.size()) {
+                        mainEngine.startButtonPressed("ScreenStart");
+                    } else {
+                        startTypingLine();
+                    }
+                }
+            }
+        });
+    }
+
+    private void startTypingLine() {
+        if (currentLine >= lines.size()) return;
+
+        currentChar = 0;
+        isTyping = true;
+
+        typingTimer = new Timer(50, e -> {
+            String line = lines.get(currentLine);
+
+            if (currentChar < line.length()) {
+                storyText.append(String.valueOf(line.charAt(currentChar)));
+                currentChar++;
+            } else {
+                storyText.append("\n\n");
+                typingTimer.stop();
+                isTyping = false;
+            }
+        });
+
+        typingTimer.start();
     }
 }
