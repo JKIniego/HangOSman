@@ -25,6 +25,7 @@ public class ScreenGameOver extends JPanel {
             @Override
             public void keyPressed(java.awt.event.KeyEvent e) {
                 System.out.println("Key Pressed - Restarting...");
+                mainEngine.stopErrorSound();
                 mainEngine.startButtonPressed("ScreenStart");
             }
         });

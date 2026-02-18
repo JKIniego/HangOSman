@@ -105,6 +105,7 @@ public class WindowSettings extends JPanel{
                 }
             });
             btn.addActionListener(e -> {
+                    mainEngine.playSound("click");
                     if (btn == minimizeButton || btn == closeButton){
                         this.setVisible(false);
                     } else if (btn == maximizeButton){
@@ -218,6 +219,7 @@ public class WindowSettings extends JPanel{
             box.setBorder(combined);
 
             box.addActionListener(e -> {
+                mainEngine.playSound("click");
                 buttonStates[index] = !buttonStates[index];
                 
                 if (buttonStates[index]) {
@@ -368,6 +370,7 @@ public class WindowSettings extends JPanel{
             box.setBorder(combined);
 
             box.addActionListener(e -> {
+                mainEngine.playSound("click");
                 soundStates[index] = !soundStates[index];
                 
                 if (soundStates[index]) {

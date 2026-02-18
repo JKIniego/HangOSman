@@ -27,6 +27,8 @@ public class ScreenStory extends JPanel {
         setBackground(Color.BLACK);
         setLayout(new BorderLayout());
 
+        mainEngine.playMusic("splash.wav");
+
         initializeStoryLines();
         initializeStoryText();
         initializeSkipButton();
@@ -81,6 +83,9 @@ public class ScreenStory extends JPanel {
         
 
         skipButton.addActionListener(e -> {
+            mainEngine.playSound("click");
+            mainEngine.stopTypingSound();
+            mainEngine.stopMusic();
             typingTimer.stop();
             mainEngine.startButtonPressed("ScreenStart");
         });
@@ -103,6 +108,7 @@ public class ScreenStory extends JPanel {
 
                 if (isTyping) {
                     typingTimer.stop();
+                    mainEngine.stopTypingSound();
 
                     String fullLine = lines.get(currentLine);
 
@@ -120,6 +126,7 @@ public class ScreenStory extends JPanel {
                     // Move to next line
                     currentLine++;
                     if (currentLine >= lines.size()) {
+                        mainEngine.stopMusic();
                         mainEngine.startButtonPressed("ScreenStart");
                     } else {
                         startTypingLine();
@@ -139,12 +146,17 @@ public class ScreenStory extends JPanel {
             String line = lines.get(currentLine);
 
             if (currentChar < line.length()) {
+                if (line.charAt(currentChar) != ' ') {
+                    mainEngine.playSound("typing.wav");
+                }
+
                 storyText.append(String.valueOf(line.charAt(currentChar)));
                 currentChar++;
             } else {
                 storyText.append("\n\n");
                 typingTimer.stop();
                 isTyping = false;
+                mainEngine.stopTypingSound();
             }
         });
 

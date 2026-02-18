@@ -108,6 +108,7 @@ public class WindowDecoder extends JPanel{
                 }
             });
             btn.addActionListener(e -> {
+                    mainEngine.playSound("click");
                     if (btn == minimizeButton || btn == closeButton){
                         this.setVisible(false);
                     } else if (btn == maximizeButton){

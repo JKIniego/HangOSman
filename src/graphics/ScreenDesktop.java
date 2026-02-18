@@ -154,6 +154,7 @@ public class ScreenDesktop extends JPanel {
         });
 
         button.addActionListener(e -> {
+            mainEngine.playSound("click");
             button.setBorder(selectionBorder);
             if (selectedDesktopIcon != null && selectedDesktopIcon != button) {
                 selectedDesktopIcon.setBorder(emptyBorder);
@@ -194,6 +195,7 @@ public class ScreenDesktop extends JPanel {
             }
         });
         startButton.addActionListener(e -> {
+            mainEngine.playSound("click");
             mainEngine.startButtonPressed("ScreenGameOver");
         });
         startButton.getModel().addChangeListener(e -> {

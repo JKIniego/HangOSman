@@ -30,6 +30,7 @@ public class MainEngine {
         data.setWrong(0);
         data.setPercentage();
         firstRound = true;
+        playSound("error4.wav");
         gui.changeScreen("ScreenGameOver");
         gui.openWindows("Clear All");
     }
@@ -56,6 +57,7 @@ public class MainEngine {
         data.getGuessedLetters().add(key);
 
         if (wordToGuess.toUpperCase().contains(String.valueOf(key))) {
+            playSound("click");
             gui.revealLetterInDecoder(wordToGuess, key);
 
             if (isWordFullyGuessed()) {
@@ -63,6 +65,7 @@ public class MainEngine {
             }
 
         } else {
+            playSound("errorButton.wav");
             data.setLives(data.getLives() - 1);
             data.setWrong(data.getWrong() + 1);
             gui.updateStickmanStatus(data.getLives());
@@ -123,9 +126,24 @@ public class MainEngine {
     public void playSound(String soundName) {
         if (soundName.equals("click")) {
             audioManager.playButtonClick();
-        } else {
+        } 
+        else if (soundName.equals("typing.wav")) {
+            audioManager.playTyping();
+        }
+        else if (soundName.equals("error4.wav")) {
+            audioManager.playErrorSound();
+        }
+        else {
             audioManager.playSound(soundName);
         }
+    }
+
+    public void stopTypingSound() {
+        audioManager.stopTyping();
+    }
+
+    public void stopErrorSound() {
+        audioManager.stopErrorSound();
     }
 
     public void playMusic(String filename) {

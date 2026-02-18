@@ -26,7 +26,7 @@ public class ScreenStart extends JPanel {
         JButton startButton = new JButton("Start");
         startButton.setIcon(branding.icoWindows);
         startButton.setPreferredSize(new java.awt.Dimension(100, 32));
-        startButton.addActionListener(e -> {mainEngine.startButtonPressed("ScreenDesktop");});
+        startButton.addActionListener(e -> {mainEngine.playSound("click"); mainEngine.startButtonPressed("ScreenDesktop");});
         branding.designButtonStart(startButton);
         Color originalColor = startButton.getBackground();
         startButton.addMouseListener(new MouseAdapter() {

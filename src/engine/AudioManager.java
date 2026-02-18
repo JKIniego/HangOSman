@@ -10,6 +10,8 @@ public class AudioManager {
     // Preloaded clips
     private static Clip buttonClickClip;
     private static Clip currentMusicClip;
+    private static Clip typingClip;
+    private static Clip errorClip;
     
     public AudioManager() {
         preloadSounds();
@@ -19,8 +21,10 @@ public class AudioManager {
     private void preloadSounds() {
         try {
             buttonClickClip = loadClip("button.wav");
+            typingClip = loadClip("typing.wav");
+            errorClip = loadClip("error4.wav");
         } catch (Exception e) {
-            System.err.println("@ Error preloading button click sound: " + e.getMessage());
+            System.err.println("@ Error preloading sounds: " + e.getMessage());
         }
     }
     
@@ -28,6 +32,20 @@ public class AudioManager {
         playClip(buttonClickClip);
     }
     
+    public void playTyping() {
+        playClip(typingClip);
+    }
+
+    public void playErrorSound() {
+        playClip(errorClip);
+    }
+
+    public void stopErrorSound() {
+        if (errorClip != null && errorClip.isRunning()) {
+            errorClip.stop();
+        }
+    }
+
     // General method to play sound
     public void playSound(String filename) {
         try {
@@ -38,6 +56,12 @@ public class AudioManager {
         }
     }
     
+    public void stopTyping() {
+        if (typingClip != null && typingClip.isRunning()) {
+            typingClip.stop();
+        }
+    }
+
     // Music control methods
     public void playMusic(String filename) {
         stopMusic();
