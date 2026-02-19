@@ -13,6 +13,7 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -36,6 +37,8 @@ public class WindowDecoder extends JPanel{
     private JPanel windowHeaderPanel, windowContentPanel, redactedWordPanel;
     private Point mouseDownCompCoords;
     private List<JButton> keyboardButtons;
+    private ActionListener[] buttonListeners;
+    private ActionListener nextWordListener;
     public WindowDecoder(MainEngine mainEngine, Branding branding){
         this.mainEngine = mainEngine;
         this.branding = branding;
@@ -183,7 +186,9 @@ public class WindowDecoder extends JPanel{
             {" "}
         };
         keyboardButtons = new ArrayList<JButton>();
-        
+        buttonListeners = new java.awt.event.ActionListener[27];
+        int btnIndex = 0;
+
         for (int row = 0; row < keyboardLayout.length; row++) {
             JPanel rowPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 3, 1));
             rowPanel.setBackground(branding.windowColor);
@@ -210,11 +215,6 @@ public class WindowDecoder extends JPanel{
                         }
                     }
                 });
-                btn.addActionListener(e -> {
-                    mainEngine.decoderButtonPressed(key);
-                    btn.setEnabled(false);
-                    branding.designButtonDefaultPressed(btn);
-                });
                 btn.getModel().addChangeListener(e -> {
                     ButtonModel model = (ButtonModel) e.getSource();
                     if (model.isEnabled()) {
@@ -225,6 +225,18 @@ public class WindowDecoder extends JPanel{
                         }
                     }
                 });
+
+                final int idx = btnIndex++;
+                java.awt.event.ActionListener listener = e -> {
+                    mainEngine.decoderButtonPressed(key);
+                    btn.setEnabled(false);
+                    branding.designButtonDefaultPressed(btn);
+                    if (mainEngine.isWordGuessed) {
+                        setButtonsState();
+                    }
+                };
+                buttonListeners[idx] = listener;
+                btn.addActionListener(listener);
 
                 String keyString = keyboardLayout[row][col].equals(" ") ? " " : String.valueOf(key);
                 int keyCode = keyboardLayout[row][col].equals(" ") ? KeyEvent.VK_SPACE : KeyEvent.getExtendedKeyCodeForChar(key);
@@ -320,7 +332,7 @@ public class WindowDecoder extends JPanel{
             if (redactedWord.charAt(i) == letter) {
                 JLabel letterLabel = (JLabel) labels[i];
                 letterLabel.setOpaque(false);
-                letterLabel.setFont(branding.windowsFont2Small);
+                letterLabel.setFont(branding.decoderDisplayFont);
                 letterLabel.setForeground(branding.black);
                 Border underline = BorderFactory.createMatteBorder(0, 0, 2, 0, branding.black);
                 letterLabel.setBorder(underline);
@@ -329,12 +341,12 @@ public class WindowDecoder extends JPanel{
         }
     }
 
-    public void resetKeyboardButtons(){
-        for(JButton btn : keyboardButtons){
-            branding.designButtonDefault(btn);
-            btn.setEnabled(true);
-        }
-    }
+    // public void resetKeyboardButtons(){
+    //     for(JButton btn : keyboardButtons){
+    //         branding.designButtonDefault(btn);
+    //         btn.setEnabled(true);
+    //     }
+    // }
 
     public void initializeListenerConsumer(){
         this.addMouseListener(new MouseAdapter() {
@@ -374,4 +386,66 @@ public class WindowDecoder extends JPanel{
         });
     }
     
+    public void resetKeyboardButtons() {
+        setButtonsState();
+    }
+
+    public void setButtonsState() {
+        for (int i = 0; i < keyboardButtons.size(); i++) {
+            JButton btn = keyboardButtons.get(i);
+            String keyText = btn.getText();
+            boolean isSpacebar = keyText.equals(" ") || keyText.equals("next word");
+            char key = isSpacebar ? ' ' : keyText.charAt(0);
+            int keyCode = isSpacebar ? KeyEvent.VK_SPACE : KeyEvent.getExtendedKeyCodeForChar(key);
+            String keyString = isSpacebar ? " " : String.valueOf(key);
+
+            if (!mainEngine.isWordGuessed) {
+                btn.removeActionListener(buttonListeners[i]);
+                btn.addActionListener(buttonListeners[i]);
+                btn.setEnabled(true);
+                branding.designButtonDefault(btn);
+                if (isSpacebar) {
+                    btn.setText(" ");
+
+                    if (nextWordListener != null) {
+                        btn.removeActionListener(nextWordListener);
+                        nextWordListener = null;
+                    }
+                }
+                btn.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+                    KeyStroke.getKeyStroke(keyCode, 0), "pressed_" + keyString);
+                btn.getActionMap().put("pressed_" + keyString, new AbstractAction() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        btn.doClick();
+                    }
+                });
+            } else if(mainEngine.isWordGuessed){
+                btn.removeActionListener(buttonListeners[i]);
+                btn.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).remove(
+                    KeyStroke.getKeyStroke(keyCode, 0));
+                 if (isSpacebar) {
+                    btn.setText("next word");
+                    btn.setEnabled(true);
+                    btn.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+                        KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), "pressed_ ");
+                    btn.getActionMap().put("pressed_ ", new AbstractAction() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            btn.doClick();
+                        }
+                    });
+
+                    if (nextWordListener != null) {
+                        btn.removeActionListener(nextWordListener);
+                    }
+                    nextWordListener = e -> {
+                        mainEngine.newRound();
+                        setButtonsState();
+                    };
+                    btn.addActionListener(nextWordListener);
+                }
+            }
+        }
+    }
 }

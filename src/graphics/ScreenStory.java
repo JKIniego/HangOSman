@@ -48,8 +48,7 @@ public class ScreenStory extends JPanel {
         lines.add("C:\\> His files have been released but most are redacted.");
         lines.add("C:\\> You are an FBI agent uncovering the files for clues.");
         lines.add("C:\\> Your mission: Decode the words or face the consequences.");
-        lines.add("C:\\> Six lives. One chance.");
-        lines.add("");
+        lines.add("C:\\> Six lives. One chance.\n");
         lines.add("C:\\> Press any key to continue...");
     }
 
@@ -102,38 +101,50 @@ public class ScreenStory extends JPanel {
         setFocusable(true);
         requestFocusInWindow();
 
-        addKeyListener(new KeyAdapter() {
+        MouseAdapter mouseAdapter = new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                requestFocusInWindow();
+                handleAdvance();
+            }
+        };
+
+        KeyAdapter keyAdapter = new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-
-                if (isTyping) {
-                    typingTimer.stop();
-                    mainEngine.stopTypingSound();
-
-                    String fullLine = lines.get(currentLine);
-
-                    // Remove partially typed line
-                    int textLength = storyText.getText().length();
-                    storyText.setText(
-                        storyText.getText().substring(0, textLength - currentChar)
-                    );
-
-                    // Add full correct line
-                    storyText.append(fullLine + "\n\n");
-
-                    isTyping = false;
-                } else {
-                    // Move to next line
-                    currentLine++;
-                    if (currentLine >= lines.size()) {
-                        mainEngine.stopMusic();
-                        mainEngine.startButtonPressed("ScreenStart");
-                    } else {
-                        startTypingLine();
-                    }
-                }
+                handleAdvance();
             }
-        });
+        };
+
+        addKeyListener(keyAdapter);
+        addMouseListener(mouseAdapter);
+        storyText.addMouseListener(mouseAdapter);
+    }
+
+    private void handleAdvance() {
+        if (isTyping) {
+            typingTimer.stop();
+            mainEngine.stopTypingSound();
+
+            String fullLine = lines.get(currentLine);
+
+            int textLength = storyText.getText().length();
+            storyText.setText(
+                storyText.getText().substring(0, textLength - currentChar)
+            );
+
+            storyText.append(fullLine + "\n\n");
+
+            isTyping = false;
+        } else {
+            currentLine++;
+            if (currentLine >= lines.size()) {
+                mainEngine.stopMusic();
+                mainEngine.startButtonPressed("ScreenStart");
+            } else {
+                startTypingLine();
+            }
+        }
     }
 
     private void startTypingLine() {

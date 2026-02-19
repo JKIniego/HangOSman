@@ -196,7 +196,7 @@ public class WindowRecycleBin extends JPanel{
     public void refreshStatDisplay() {
         statsContainter.removeAll();
 
-        String stringLabels[] = {"Words Leaked: ", "Escaped Limbs: ", "Leak Percentage: "};
+        String stringLabels[] = {"Words Leaked: ", "Escaped Limbs: ", "Leak Efficiency: "};
         int stats[] = {
             mainEngine.getData().getCorrect(), 
             mainEngine.getData().getWrong(), 
@@ -213,7 +213,7 @@ public class WindowRecycleBin extends JPanel{
             label.setFont(branding.windowsFontSmall);
             
             String valueText = String.valueOf(stats[i]);
-            if (stringLabels[i].contains("Percentage")) {
+            if (stringLabels[i].contains("Efficiency")) {
                 valueText += "%";
             }
             

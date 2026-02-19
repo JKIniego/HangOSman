@@ -2,6 +2,7 @@ package graphics;
 
 import engine.MainEngine;
 import java.awt.BorderLayout;
+import java.awt.Cursor;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import javax.swing.BorderFactory;
@@ -24,9 +25,15 @@ public class ScreenGameOver extends JPanel {
         this.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override
             public void keyPressed(java.awt.event.KeyEvent e) {
-                System.out.println("Key Pressed - Restarting...");
-                mainEngine.stopErrorSound();
-                mainEngine.startButtonPressed("ScreenStart");
+                if (e.getKeyCode() == java.awt.event.KeyEvent.VK_R) {
+                    System.out.println("R Pressed - Restarting...");
+                    mainEngine.stopErrorSound();
+                    mainEngine.startButtonPressed("ScreenStart");
+                } else if (e.getKeyCode() == java.awt.event.KeyEvent.VK_E) {
+                    System.out.println("E Pressed - Exiting...");
+                    mainEngine.stopErrorSound();
+                    System.exit(0);
+                }
             }
         });
 
@@ -34,6 +41,7 @@ public class ScreenGameOver extends JPanel {
         JPanel bannerPanel = new JPanel(new BorderLayout());
         JPanel headlinePanel = new JPanel(new BorderLayout());
         JPanel messagePanel = new JPanel(new BorderLayout());
+        JPanel optionsPanel = new JPanel();
 
         //headerPanel.setBackground(branding.green); bannerPanel.setBackground(branding.white); headlinePanel.setBackground(branding.black); messagePanel.setBackground(branding.gray2);
 
@@ -41,6 +49,8 @@ public class ScreenGameOver extends JPanel {
         bannerPanel.setOpaque(false);
         headlinePanel.setOpaque(false);
         messagePanel.setOpaque(false);
+        optionsPanel.setOpaque(false);
+
 
         JLabel headerLabel = new JLabel("Windows", JLabel.CENTER);
         headerLabel.setFont(branding.windowsFont2Large);
@@ -68,13 +78,49 @@ public class ScreenGameOver extends JPanel {
         headlinePanel.add(headlineLabel, BorderLayout.CENTER);
 
 
-        JLabel messageLabel = new JLabel("<html>Reason: <br><br> A stickman was detected interfering with your hardware.<br><br><br>Error code: STICKMAN_HARDWARE_MALFUNCTION<br><br><br>You can restart, but the stickman probably rebuilt itself. <br><br>Press any key to restart.</html>", JLabel.CENTER);
+        JLabel messageLabel = new JLabel("<html>Reason: <br><br> A stickman was detected interfering with your hardware.<br><br><br>Error code: STICKMAN_HARDWARE_MALFUNCTION<br><br><br>RECOVERY OPTIONS: <br><br></html>", JLabel.CENTER);
         messageLabel.setFont(branding.windowsFont2Medium);
         messageLabel.setForeground(branding.white);
         messageLabel.setHorizontalAlignment(JLabel.LEFT);
         messageLabel.setVerticalAlignment(JLabel.TOP);
         messagePanel.add(messageLabel, BorderLayout.CENTER);
-        startFlickerEffect(messageLabel);
+
+        // Restart button styled as text
+        JLabel restartLabel = new JLabel("Press R to restart.");
+        restartLabel.setFont(branding.windowsFont2Medium);
+        restartLabel.setForeground(branding.white);
+        restartLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        restartLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                mainEngine.stopErrorSound();
+                mainEngine.startButtonPressed("ScreenStart");
+            }
+        });
+
+        // Separator
+        JLabel separatorLabel = new JLabel("  |  ");
+        separatorLabel.setFont(branding.windowsFont2Medium);
+        separatorLabel.setForeground(branding.white);
+
+        // Exit button styled as text
+        JLabel exitLabel = new JLabel("Press E to exit.");
+        exitLabel.setFont(branding.windowsFont2Medium);
+        exitLabel.setForeground(branding.white);
+        exitLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        exitLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                mainEngine.stopErrorSound();
+                System.exit(0);
+            }
+        });
+        
+        optionsPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
+        optionsPanel.add(restartLabel);
+        optionsPanel.add(separatorLabel);
+        optionsPanel.add(exitLabel);
+        startFlickerEffect(restartLabel, separatorLabel, exitLabel);
 
         JPanel displayPanel = new JPanel();
         displayPanel.setLayout(new GridBagLayout());
@@ -103,29 +149,31 @@ public class ScreenGameOver extends JPanel {
         displayPanel.add(headlinePanel, gbc);
 
         gbc.gridy++;
-        gbc.ipady = 250;
+        gbc.ipady = 50;
         gbc.weighty = 0.1;
         displayPanel.add(messagePanel, gbc);
+        
+        gbc.gridy++;
+        gbc.ipady = 250;
+        gbc.weighty = 0.1;
+        displayPanel.add(optionsPanel, gbc);
 
 
         add(displayPanel);
     }
 
-    private void startFlickerEffect(JLabel messageLabel) {
-        Timer timer = new Timer(500, null); // Flicker every 500ms
+    private void startFlickerEffect(JLabel restartLabel, JLabel separatorLabel, JLabel exitLabel) {
+        Timer timer = new Timer(500, null);
         final boolean[] visible = {true};
-        
+
         timer.addActionListener(e -> {
-            if(visible[0]) {
-                // Show with white color
-                messageLabel.setText("<html>Reason: <br><br> A stickman was detected interfering with your hardware.<br><br><br>Error code: STICKMAN_HARDWARE_MALFUNCTION<br><br><br>You can restart, but the stickman probably rebuilt itself. <br><br><font color='white'>Press any key to restart.</font></html>");
-            } else {
-                // Hide by matching background color
-                messageLabel.setText("<html>Reason: <br><br> A stickman was detected interfering with your hardware.<br><br><br>Error code: STICKMAN_HARDWARE_MALFUNCTION<br><br><br>You can restart, but the stickman probably rebuilt itself. <br><br><font color='#0078D7'>Press any key to restart.</font></html>");
-            }
+            java.awt.Color color = visible[0] ? java.awt.Color.WHITE : new java.awt.Color(0x0078D7);
+            restartLabel.setForeground(color);
+            separatorLabel.setForeground(color);
+            exitLabel.setForeground(color);
             visible[0] = !visible[0];
         });
-        
+
         timer.start();
     }
 }

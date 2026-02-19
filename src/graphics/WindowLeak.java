@@ -22,7 +22,7 @@ import javax.swing.border.Border;
 public class WindowLeak extends JPanel{
     private MainEngine mainEngine;
     private Branding branding;
-    private JPanel windowHeaderPanel, statsContainter;
+    private JPanel windowHeaderPanel;
     private Point mouseDownCompCoords;
 
     public WindowLeak(MainEngine mainEngine, Branding branding){

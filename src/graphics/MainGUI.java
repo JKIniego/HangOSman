@@ -149,6 +149,26 @@ public class MainGUI {
         }
     }
 
+    public void animateScreenStart() {
+        scrnStartScreen.resetFade();
+
+        Timer timer = new Timer(20, null);
+        final long[] startTime = {System.currentTimeMillis()};
+        final int duration = 1000;
+
+        timer.addActionListener(e -> {
+            long elapsed = System.currentTimeMillis() - startTime[0];
+            float alpha = Math.min(1f, (float) elapsed / duration);
+
+            scrnStartScreen.setFadeAlpha(alpha);
+
+            if (alpha >= 1f) {
+                ((Timer) e.getSource()).stop();
+            }
+        });
+        timer.start();
+    }
+
     public void renderNewRedactedWord(String redactedWord) {
         if (scrnDesktop != null) {
             WindowDecoder decoder = scrnDesktop.getWindowDecoder();
@@ -180,7 +200,7 @@ public class MainGUI {
         if (scrnDesktop != null) {
             WindowRecycleBin recycleBin = scrnDesktop.getWindowRecycleBin();
             if (recycleBin != null) {
-                recycleBin.refreshStatDisplay();;
+                recycleBin.refreshStatDisplay();
             }
         }
     }
@@ -191,6 +211,7 @@ public class MainGUI {
         for (java.awt.Component comp : mainPanel.getComponents()) {
             if (comp.isVisible()) {
                 comp.requestFocusInWindow();
+                if(screenName.equals("ScreenStart")){animateScreenStart();}
                 if(screenName.equals("ScreenDesktop")){animateTaskbar();animateDesktopIcons();}
                 break;
             }
@@ -245,6 +266,10 @@ public class MainGUI {
                     flickerBorder(leak);
                 }
                 bringToFront(leak);
+            } else if (iconName.equals("Clear Leak")){
+                if(leak.isVisible()){
+                    leak.setVisible(false);
+                }
             } else if (iconName.equals("Clear All")) {
                 decoder.setVisible(false);
                 stickman.setVisible(false);

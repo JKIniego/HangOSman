@@ -83,7 +83,24 @@ public class Data {
     }
 
     public void setPercentage() {
-        //this.percentage = ((correct * 6)-wrong)/correct*(correct*6);
+        if (correct <= 0) {
+            percentage = 0;
+        }
+
+        int totalPossibleLives = correct * 6;
+
+        // Prevent negative or impossible values (optional safety clamp)
+        if (wrong < 0) {
+            wrong = 0;
+        }
+        if (wrong > totalPossibleLives) {
+            wrong = totalPossibleLives;
+        }
+
+        double guessRate = ((double)(totalPossibleLives - wrong) 
+                            / totalPossibleLives) * 100;
+
+        percentage = (int) Math.round(guessRate);
     }
 
     public Set<Character> getGuessedLetters() {

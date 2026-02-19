@@ -19,6 +19,7 @@ import javax.swing.border.Border;
 public class Branding {
     public Font windowsFontExtraSmall, windowsFontSmall, windowsFontMedium, windowsFontLarge, windowsFontExtraLarge, windowsFontGiant;
     public Font windowsFont2ExtraSmall, windowsFont2Small, windowsFont2Medium, windowsFont2Large, windowsFont2ExtraLarge;
+    public Font decoderDisplayFont;
     public ImageIcon imgWindows67, imgHangman6, imgHangman5, imgHangman4, imgHangman3, imgHangman2, imgHangman1, imgHangman0;
     public ImageIcon icoWindows, icoRecycleBin, icoComputer, icoDirections, icoSettings, icoLeak, icoCheck;
     public ImageIcon imgStep1a, imgStep1b, imgStep2, imgStep3a, imgStep3b;
@@ -65,6 +66,8 @@ public class Branding {
             windowsFontLarge = windowsFont.deriveFont(Font.BOLD, 24f);
             windowsFontExtraLarge = windowsFont.deriveFont(Font.BOLD, 32f);
             windowsFontGiant = windowsFont.deriveFont(Font.BOLD, 200f);
+
+            decoderDisplayFont = windowsFont.deriveFont(Font.BOLD, 17f);
 
             Font windowsFont2 = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/assets/fonts/pixelmix_bold.ttf"));
             windowsFont2ExtraSmall = windowsFont2.deriveFont(Font.PLAIN, 10f);

@@ -10,6 +10,7 @@ public class MainEngine {
     private Data data;
     private AudioManager audioManager;
     private boolean firstRound;
+    public boolean isWordGuessed;
     public String wordToGuess;
 
 
@@ -22,6 +23,7 @@ public class MainEngine {
     public void start(){
         System.out.println("@ Engine Started");
         firstRound = true;
+        isWordGuessed = false;
         getRandomRedactedWord();
     }
 
@@ -38,6 +40,7 @@ public class MainEngine {
     public void wordGuessed(){
         data.setCorrect(data.getCorrect()+1);
         data.setPercentage();
+        isWordGuessed = true;
         gui.openWindows("Leak");
         System.out.println("WORD GUESSED");
     }
@@ -91,9 +94,11 @@ public class MainEngine {
     public void newRound(){
         System.out.println("@ Refreshing Redacted Word...");
         getRandomRedactedWord();
+        isWordGuessed = false;
         data.setLives(6);
         data.getGuessedLetters().clear();
         gui.renderNewRedactedWord(wordToGuess);
+        gui.openWindows("Clear Leak");
         gui.updateStickmanStatus(data.getLives());
     }
 
