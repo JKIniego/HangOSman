@@ -110,10 +110,9 @@ public class MainEngine {
         } else if (screenName.equals("ScreenStart")){
             gui.changeScreen(screenName);
             playSound("startup.wav");
+        } else if (screenName.equals("Close Window")){
+            gui.openWindows(screenName);
         }
-
-        // Future functionality for real start menu can be added here, 
-        // for now it does nothing on desktop
         System.out.println("@ Start Button Pressed");
     }
 

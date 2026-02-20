@@ -62,17 +62,37 @@ public class MainGUI {
     }
 
     private void initializeOverlay() {
-        overlay = new OverlayEffect("overlay4.png");
+        overlay = new OverlayEffect(); 
         mainFrame.setGlassPane(overlay);
-        overlay.setVisible(true); 
+        overlay.setVisible(true);
     }
 
 
-    // Updating Methods
-
+    /** Master toggle — hides/shows the entire glass pane. */
     public void setOverlayVisible(boolean visible) {
         overlay.setVisible(visible);
     }
+
+    /** Toggle overlay layer 1 (the lives-driven scanline / red vignette). */
+    public void setOverlay1Visible(boolean visible) {
+        overlay.setLayer1Visible(visible);
+    }
+
+    /** Toggle overlay layer 2. */
+    public void setOverlay2Visible(boolean visible) {
+        overlay.setLayer2Visible(visible);
+    }
+
+    /** Toggle overlay layer 3. */
+    public void setOverlay3Visible(boolean visible) {
+        overlay.setLayer3Visible(visible);
+    }
+
+    /** Read current visibility of each layer (useful to init Settings checkboxes). */
+    public boolean isOverlay1Visible() { return overlay.isLayer1Visible(); }
+    public boolean isOverlay2Visible() { return overlay.isLayer2Visible(); }
+    public boolean isOverlay3Visible() { return overlay.isLayer3Visible(); }
+
 
     public void animateTaskbar(){
         if (scrnDesktop != null) {
@@ -226,6 +246,7 @@ public class MainGUI {
             WindowSettings settings = scrnDesktop.getWindowSettings();
             WindowRecycleBin recycleBin = scrnDesktop.getWindowRecycleBin();
             WindowLeak leak = scrnDesktop.getWindowLeak();
+            WindowClose close = scrnDesktop.getWindowClose();
             
             if(iconName.equals("Play")){
                 if(decoder.isVisible() && stickman.isVisible()){
@@ -267,6 +288,15 @@ public class MainGUI {
                     popIn(recycleBin);
                 }
                 bringToFront(recycleBin);
+            } else if (iconName.equals("Close Window")){
+                if(close.isVisible()){
+                    flickerBorder(close);
+                    shakeWindow(close);
+                    engine.getAudioManager().playSound("errorButton.wav");
+                }else{
+                    popIn(close);
+                }
+                bringToFront(close);
             } else if (iconName.equals("Leak")){
                 if(leak.isVisible()){
                     flickerBorder(leak);
@@ -288,6 +318,7 @@ public class MainGUI {
                 settings.setVisible(false);
                 recycleBin.setVisible(false);
                 leak.setVisible(false);
+                close.setVisible(false);
             } 
         }
     }

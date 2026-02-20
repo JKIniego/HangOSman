@@ -1,7 +1,7 @@
 package engine;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import javax.sound.sampled.*;
 
 public class AudioManager {
@@ -108,8 +108,11 @@ public class AudioManager {
     // -------------------------
 
     private static Clip loadClip(String filename)
-            throws IOException, UnsupportedAudioFileException, LineUnavailableException {
-        File soundFile = new File(SOUNDS_PATH + filename);
+        throws IOException, UnsupportedAudioFileException, LineUnavailableException {
+        InputStream soundFile = AudioManager.class.getResourceAsStream("/assets/sounds/" + filename);
+        if(soundFile == null) {
+            throw new IOException("Sound file not found: " + filename);
+        }
         AudioInputStream audioStream = AudioSystem.getAudioInputStream(soundFile);
         Clip clip = AudioSystem.getClip();
         clip.open(audioStream);
@@ -134,8 +137,6 @@ public class AudioManager {
         if (!clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) return;
 
         FloatControl gain = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-        // Convert linear scale → decibels: dB = 20 * log10(volume)
-        // Guard against log(0) with a tiny floor value
         float dB = (volume == 0f) ? gain.getMinimum() : 20f * (float) Math.log10(volume);
         gain.setValue(Math.max(gain.getMinimum(), Math.min(gain.getMaximum(), dB)));
     }

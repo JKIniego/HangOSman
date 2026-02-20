@@ -29,6 +29,7 @@ public class ScreenDesktop extends JPanel {
     private WindowSettings windowSettings;
     private WindowRecycleBin windowRecycleBin;
     private WindowLeak windowLeak;
+    private WindowClose windowClose;
 
     public ScreenDesktop(MainEngine mainEngine, Branding branding) {
         this.branding = branding;
@@ -79,12 +80,17 @@ public class ScreenDesktop extends JPanel {
         windowLeak.setSize(windowLeak.getPreferredSize());
         windowLeak.setLocation(350, 260);
 
+        windowClose = new WindowClose(mainEngine, branding);
+        windowClose.setSize(windowClose.getPreferredSize());
+        windowClose.setLocation(350, 260);
+
         desktopWindows.add(windowDecoder, BorderLayout.CENTER);
         desktopWindows.add(windowStickman, BorderLayout.CENTER);
         desktopWindows.add(windowDirections, BorderLayout.CENTER);
         desktopWindows.add(windowSettings, BorderLayout.CENTER);
         desktopWindows.add(windowRecycleBin, BorderLayout.CENTER);
         desktopWindows.add(windowLeak, BorderLayout.CENTER);
+        desktopWindows.add(windowClose, BorderLayout.CENTER);
 
 
         this.add(desktopWindows, BorderLayout.CENTER);
@@ -196,7 +202,7 @@ public class ScreenDesktop extends JPanel {
         });
         startButton.addActionListener(e -> {
             mainEngine.playSound("click");
-            mainEngine.startButtonPressed("ScreenGameOver");
+            mainEngine.startButtonPressed("Close Window");
         });
         startButton.getModel().addChangeListener(e -> {
             ButtonModel model = (ButtonModel) e.getSource();
@@ -241,5 +247,8 @@ public class ScreenDesktop extends JPanel {
     }
     public WindowLeak getWindowLeak() {
         return windowLeak;
+    }
+    public WindowClose getWindowClose() {
+        return windowClose;
     }
 }

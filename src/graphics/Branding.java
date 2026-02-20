@@ -154,9 +154,6 @@ public class Branding {
 
             icoCheck = resizeImage(buff_icoCheck, 1f);
 
-            //sampleGIF = new ImageIcon(getClass().getResource("image.gif"));
-            //sampleGIF = resizeGIF(sampleGIF, 800, 150);
-
         } catch (IOException ex) {
             ex.printStackTrace();
         }

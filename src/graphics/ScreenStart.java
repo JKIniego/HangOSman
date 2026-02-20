@@ -27,12 +27,12 @@ public class ScreenStart extends JPanel {
         setBackground(branding.backgroundColor);
         setLayout(new GridBagLayout());
 
-        startButton = new JButton("Start"); // field assignment, not local variable
+        startButton = new JButton("Start"); 
         startButton.setIcon(branding.icoWindows);
         startButton.setPreferredSize(new java.awt.Dimension(100, 32));
         startButton.addActionListener(e -> { mainEngine.playSound("click"); mainEngine.startButtonPressed("ScreenDesktop"); });
         branding.designButtonStart(startButton);
-        startButton.setVisible(false); // hidden until fade begins
+        startButton.setVisible(false); 
 
         Color originalColor = startButton.getBackground();
         startButton.addMouseListener(new MouseAdapter() {

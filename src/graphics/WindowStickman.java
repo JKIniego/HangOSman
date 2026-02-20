@@ -233,7 +233,7 @@ public class WindowStickman extends JPanel{
         gbc.gridy = 0;
         gbc.weightx = 1;
         gbc.insets = new Insets(5, 0, 0, 0);
-        gbc.anchor = GridBagConstraints.NORTH;  // Anchor to top
+        gbc.anchor = GridBagConstraints.NORTH;
         gbc.fill = GridBagConstraints.VERTICAL;
         toolsPanel.add(toolsContainer, gbc);
 

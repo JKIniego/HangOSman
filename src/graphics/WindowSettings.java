@@ -158,31 +158,27 @@ public class WindowSettings extends JPanel{
         JButton rayTracingBox = new JButton();
         JButton vfxOverlayBox = new JButton();
         JButton shadersBox = new JButton();
-        JButton antiAliasingBox = new JButton();
 
         // === labels ===
         JLabel rayTracingLabel = new JLabel("Ray Tracing");
         JLabel vfxOverlayLabel = new JLabel("VFX Overlay");
-        JLabel shadersLabel = new JLabel("Shaders"); 
-        JLabel antiAliasingLabel = new JLabel("Anti-Aliasing"); 
+        JLabel shadersLabel = new JLabel("Noise"); 
 
         // === arrays ===
         JButton[] boxes = {
                 rayTracingBox,
                 vfxOverlayBox,
                 shadersBox,
-                antiAliasingBox
         };
 
         JLabel[] labels = {
                 rayTracingLabel,
                 vfxOverlayLabel,
                 shadersLabel,
-                antiAliasingLabel
         };
 
         // === state tracking ===
-        boolean[] buttonStates = {false, true, false, false};
+        boolean[] buttonStates = {true, true, true};
 
         // === shared border ===
         Border highlight1 = BorderFactory.createMatteBorder(1,1,0,0,branding.white);
@@ -233,10 +229,9 @@ public class WindowSettings extends JPanel{
                 }
 
                 switch (index) {
-                    case 0 -> System.out.println("RayTracing");
-                    case 1 -> (mainEngine.getGUI()).setOverlayVisible(buttonStates[index]);
-                    case 2 -> System.out.println("Shaders");
-                    case 3 -> System.out.println("Anti-Ailiasing");
+                    case 0 -> (mainEngine.getGUI()).setOverlay2Visible(buttonStates[index]);
+                    case 1 -> (mainEngine.getGUI()).setOverlay1Visible(buttonStates[index]);
+                    case 2 -> (mainEngine.getGUI()).setOverlay3Visible(buttonStates[index]);
                 }
             });
             
