@@ -210,11 +210,13 @@ public class WindowLeak extends JPanel{
 
         exitButton.addActionListener(e -> {
             this.setVisible(false);
+            mainEngine.playSound("button.wav");
         });
 
         newWordButton.addActionListener(e -> {
             mainEngine.newRound();
-            this.setVisible(false);
+            this.setVisible(false);            
+            mainEngine.playSound("button.wav");
         });
 
         buttonPanel.add(exitButton);

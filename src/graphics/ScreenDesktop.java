@@ -77,7 +77,7 @@ public class ScreenDesktop extends JPanel {
 
         windowLeak = new WindowLeak(mainEngine, branding);
         windowLeak.setSize(windowLeak.getPreferredSize());
-        windowLeak.setLocation(350, 300);
+        windowLeak.setLocation(350, 260);
 
         desktopWindows.add(windowDecoder, BorderLayout.CENTER);
         desktopWindows.add(windowStickman, BorderLayout.CENTER);

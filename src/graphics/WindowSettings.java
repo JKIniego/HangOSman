@@ -8,9 +8,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.Label;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -19,9 +17,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonModel;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -186,7 +182,7 @@ public class WindowSettings extends JPanel{
         };
 
         // === state tracking ===
-        boolean[] buttonStates = {false, false, false, false};
+        boolean[] buttonStates = {false, true, false, false};
 
         // === shared border ===
         Border highlight1 = BorderFactory.createMatteBorder(1,1,0,0,branding.white);
@@ -216,7 +212,13 @@ public class WindowSettings extends JPanel{
             box.setFocusPainted(false);
             box.setOpaque(true);
             box.setBackground(branding.gray1);
-            box.setBorder(combined);
+            if (buttonStates[index]) {
+                box.setBorder(boxBorder);
+                box.setIcon(branding.icoWinClose);
+            } else {
+                box.setBorder(combined);
+                box.setIcon(null);
+            }
 
             box.addActionListener(e -> {
                 mainEngine.playSound("click");
@@ -228,6 +230,13 @@ public class WindowSettings extends JPanel{
                 } else {
                     box.setBorder(combined);
                     box.setIcon(null);
+                }
+
+                switch (index) {
+                    case 0 -> System.out.println("RayTracing");
+                    case 1 -> (mainEngine.getGUI()).setOverlayVisible(buttonStates[index]);
+                    case 2 -> System.out.println("Shaders");
+                    case 3 -> System.out.println("Anti-Ailiasing");
                 }
             });
             
@@ -263,6 +272,7 @@ public class WindowSettings extends JPanel{
         
         
         // ===== SOUND SECTION =====
+        boolean[] soundStates = {true, true};
         JLabel controlsSoundLabel = new JLabel("Sound");
         controlsSoundLabel.setHorizontalAlignment(SwingConstants.CENTER);
         controlsSoundLabel.setFont(branding.windowsFontMedium);
@@ -288,6 +298,11 @@ public class WindowSettings extends JPanel{
         javax.swing.JSlider volumeSlider = new javax.swing.JSlider(0, 100, 50);
         volumeSlider.setOpaque(false);
         volumeSlider.setPreferredSize(new Dimension(150, 20));
+        volumeSlider.addChangeListener(e -> {
+            float volume = volumeSlider.getValue() / 100f;
+            if(soundStates[0]) mainEngine.getAudioManager().setSFXVolume(volume);
+            if(soundStates[1]) mainEngine.getAudioManager().setMusicVolume(volume);
+        });
         
         volumeSlider.setUI(new javax.swing.plaf.basic.BasicSliderUI(volumeSlider) {
             @Override
@@ -352,7 +367,6 @@ public class WindowSettings extends JPanel{
         
         JButton[] soundBoxes = {soundEffectsBox, musicBox};
         JLabel[] soundLabels = {soundEffectsLabel, musicLabel};
-        boolean[] soundStates = {false, false};
         
         for (int i = 0; i < soundBoxes.length; i++) {
             JButton box = soundBoxes[i];
@@ -367,12 +381,18 @@ public class WindowSettings extends JPanel{
             box.setFocusPainted(false);
             box.setOpaque(true);
             box.setBackground(branding.gray1);
-            box.setBorder(combined);
+            box.setBorder(boxBorder);
+            box.setIcon(branding.icoWinClose);
 
             box.addActionListener(e -> {
                 mainEngine.playSound("click");
                 soundStates[index] = !soundStates[index];
                 
+                float vol = soundStates[index] ? volumeSlider.getValue() / 100f : 0f;
+
+                if (index == 0) mainEngine.getAudioManager().setSFXVolume(vol);
+                if (index == 1) mainEngine.getAudioManager().setMusicVolume(vol);
+
                 if (soundStates[index]) {
                     box.setBorder(boxBorder);
                     box.setIcon(branding.icoWinClose);

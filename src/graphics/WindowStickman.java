@@ -6,6 +6,8 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -22,6 +24,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 import javax.swing.border.Border;
 
 public class WindowStickman extends JPanel{
@@ -29,6 +32,8 @@ public class WindowStickman extends JPanel{
     private Branding branding;
     private JPanel windowHeaderPanel, stickmanCanvas;
     private Point mouseDownCompCoords;
+    private int shakeOffset = 0;
+    private JLabel stickmanLabel = new JLabel();
     public WindowStickman(MainEngine mainEngine, Branding branding){
         this.mainEngine = mainEngine;
         this.branding = branding;
@@ -245,11 +250,18 @@ public class WindowStickman extends JPanel{
         windowContentPanel.add(toolsPanel, BorderLayout.WEST);
 
         // Stickman Canvas (center)
-        stickmanCanvas = new JPanel();
+        stickmanCanvas = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.translate(shakeOffset, 0);
+                super.paintComponent(g);
+                g2d.translate(-shakeOffset, 0);
+            }
+        };
         stickmanCanvas.setForeground(branding.white);
         stickmanCanvas.setBorder(BorderFactory.createMatteBorder(7, 7, 3, 3, branding.gray3));
         stickmanCanvas.setLayout(new GridBagLayout());
-
         windowContentPanel.add(stickmanCanvas, BorderLayout.CENTER);
 
         // ScrollBar (east)
@@ -295,7 +307,7 @@ public class WindowStickman extends JPanel{
                 mouseDownCompCoords = e.getPoint();
                 Container parent = getParent();
                 if(parent != null){
-                    parent.setComponentZOrder(WindowStickman.this, 0); // 0 = topmost layer
+                    parent.setComponentZOrder(WindowStickman.this, 0);
                     parent.repaint();
                 }
             }
@@ -344,9 +356,35 @@ public class WindowStickman extends JPanel{
             case 0 -> newStickman = branding.imgHangman0;
             default -> newStickman = branding.imgHangman0;
         }
-        stickmanCanvas.add(new JLabel(newStickman));
+        stickmanLabel = new JLabel(newStickman);
+        stickmanCanvas.add(stickmanLabel);
         stickmanCanvas.revalidate();
         stickmanCanvas.repaint();
+        if (lives!=6) shakeLabel();
+    }
+
+    private void shakeLabel() {
+        int[] offsets = {-8, 8, -6, 6, -4, 4, -2, 2, 0};
+
+        Timer timer = new Timer(30, null);
+        final int[] index = {0};
+
+        timer.addActionListener(e -> {
+            if (index[0] >= offsets.length) {
+                stickmanLabel.setBorder(null);
+                ((Timer) e.getSource()).stop();
+            } else {
+                stickmanLabel.setBorder(BorderFactory.createEmptyBorder(
+                    0, 
+                    Math.max(0, offsets[index[0]]),  // left
+                    0, 
+                    Math.max(0, -offsets[index[0]])  // right
+                ));
+                stickmanLabel.revalidate();
+                index[0]++;
+            }
+        });
+        timer.start();
     }
 
     public void initializeListenerConsumer(){

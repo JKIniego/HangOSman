@@ -341,13 +341,6 @@ public class WindowDecoder extends JPanel{
         }
     }
 
-    // public void resetKeyboardButtons(){
-    //     for(JButton btn : keyboardButtons){
-    //         branding.designButtonDefault(btn);
-    //         btn.setEnabled(true);
-    //     }
-    // }
-
     public void initializeListenerConsumer(){
         this.addMouseListener(new MouseAdapter() {
             @Override

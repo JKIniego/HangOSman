@@ -84,9 +84,9 @@ public class MainGUI {
             taskbar.setVisible(true);
             desktop.revalidate();
             
-            Timer timer = new Timer(16, null); // ~60 FPS
+            Timer timer = new Timer(16, null);
             final long[] startTime = {System.currentTimeMillis()};
-            final int duration = 1000; // Animation duration in milliseconds
+            final int duration = 1000;
             
             timer.addActionListener(e -> {
                 long elapsed = System.currentTimeMillis() - startTime[0];
@@ -122,15 +122,14 @@ public class MainGUI {
                 iconsPanel.setVisible(true);
                 scrnDesktop.revalidate();
                 
-                Timer timer = new Timer(16, null); // ~60 FPS
+                Timer timer = new Timer(16, null);
                 final long[] startTime = {System.currentTimeMillis()};
-                final int duration = 1000; // Animation duration in milliseconds
+                final int duration = 1000;
                 
                 timer.addActionListener(e -> {
                     long elapsed = System.currentTimeMillis() - startTime[0];
                     double progress = Math.min(1.0, (double)elapsed / duration);
                     
-                    // Ease-out effect (starts fast, ends slow)
                     double eased = 1 - Math.pow(1 - progress, 3);
                     
                     int currentWidth = (int)(120 * eased);
@@ -194,6 +193,7 @@ public class MainGUI {
                 stickman.updateStickmanStatus(lives);
             }
         }
+        overlay.setLivesIntensity(lives, 6);
     }
 
     public void updateStatistics(){
@@ -211,7 +211,7 @@ public class MainGUI {
         for (java.awt.Component comp : mainPanel.getComponents()) {
             if (comp.isVisible()) {
                 comp.requestFocusInWindow();
-                if(screenName.equals("ScreenStart")){animateScreenStart();}
+                if(screenName.equals("ScreenStart")){animateScreenStart(); overlay.setLivesIntensity(6, 6);}
                 if(screenName.equals("ScreenDesktop")){animateTaskbar();animateDesktopIcons();}
                 break;
             }
@@ -231,6 +231,9 @@ public class MainGUI {
                 if(decoder.isVisible() && stickman.isVisible()){
                     flickerBorder(decoder);
                     flickerBorder(stickman);
+                    shakeWindow(decoder);
+                    shakeWindow(stickman);
+                    engine.getAudioManager().playSound("errorButton.wav");
                 }else{
                     popIn(decoder);
                     popIn(stickman);
@@ -240,6 +243,8 @@ public class MainGUI {
             } else if (iconName.equals("Directions")){
                 if(directions.isVisible()){
                     flickerBorder(directions);
+                    shakeWindow(directions);
+                    engine.getAudioManager().playSound("errorButton.wav");
                 }else{
                     popIn(directions);
                 }
@@ -247,6 +252,8 @@ public class MainGUI {
             } else if (iconName.equals("Settings")){
                 if(settings.isVisible()){
                     flickerBorder(settings);
+                    shakeWindow(settings);
+                    engine.getAudioManager().playSound("errorButton.wav");
                 }else{
                     popIn(settings);
                 }
@@ -254,6 +261,8 @@ public class MainGUI {
             } else if (iconName.equals("Recycle Bin")){
                 if(recycleBin.isVisible()){
                     flickerBorder(recycleBin);
+                    shakeWindow(recycleBin);
+                    engine.getAudioManager().playSound("errorButton.wav");
                 }else{
                     popIn(recycleBin);
                 }
@@ -261,6 +270,8 @@ public class MainGUI {
             } else if (iconName.equals("Leak")){
                 if(leak.isVisible()){
                     flickerBorder(leak);
+                    shakeWindow(leak);
+                    engine.getAudioManager().playSound("errorButton.wav");
                 }else{
                     popIn(leak);
                     flickerBorder(leak);
@@ -345,6 +356,25 @@ public class MainGUI {
             }
         });
         
+        timer.start();
+    }
+
+    private void shakeWindow(JComponent window) {
+        Point originalLocation = window.getLocation();
+        int[] offsets = {-8, 8, -6, 6, -4, 4, -2, 2, 0};
+
+        Timer timer = new Timer(30, null);
+        final int[] index = {0};
+
+        timer.addActionListener(e -> {
+            if (index[0] >= offsets.length) {
+                window.setLocation(originalLocation);
+                ((Timer) e.getSource()).stop();
+            } else {
+                window.setLocation(originalLocation.x + offsets[index[0]], originalLocation.y);
+                index[0]++;
+            }
+        });
         timer.start();
     }
 }

@@ -42,6 +42,7 @@ public class MainEngine {
         data.setPercentage();
         isWordGuessed = true;
         gui.openWindows("Leak");
+        playSound("correctWord.wav");
         System.out.println("WORD GUESSED");
     }
 
@@ -105,8 +106,10 @@ public class MainEngine {
     public void startButtonPressed(String screenName){
         if (screenName.equals("ScreenDesktop")){
             gui.changeScreen(screenName);
+            playMusic("mainBgMusic.wav");
         } else if (screenName.equals("ScreenStart")){
             gui.changeScreen(screenName);
+            playSound("startup.wav");
         }
 
         // Future functionality for real start menu can be added here, 
@@ -123,9 +126,16 @@ public class MainEngine {
     public void setGUI(MainGUI gui) {
         this.gui = gui;
     }
+    public MainGUI getGUI() {
+        return gui;
+    }
 
     public Data getData(){
         return data;
+    }
+
+    public AudioManager getAudioManager(){
+        return audioManager;
     }
 
     public void playSound(String soundName) {
