@@ -177,8 +177,8 @@ public class WindowDirections extends JPanel{
 
         JLabel step1aLabel = new JLabel("1. Guess the redacted word.");
         JLabel step1bLabel = new JLabel("<html>Every wrong guess deducts a part of<br>the illustration and the letter is removed</htm>");
-        JLabel step2aLabel = new JLabel("2. Keep Mr. E intact.");
-        JLabel step2bLabel = new JLabel("<html>Do not let the man escape or else<br>he will destroy your computer.</html>");
+        JLabel step2aLabel = new JLabel("2. Keep the criminal intact.");
+        JLabel step2bLabel = new JLabel("<html>Do not let the criminal escape or else<br>he will destroy your computer.</html>");
         JLabel step3aLabel = new JLabel("3. Win or Lose.");
         JLabel step3bLabel = new JLabel("<html>Reveal the word and save the day.<br>Or lose and get your pc corrupted.</html>");
 

@@ -35,6 +35,7 @@ public class WindowDecoder extends JPanel{
     private MainEngine mainEngine;
     private Branding branding;
     private JPanel windowHeaderPanel, windowContentPanel, redactedWordPanel;
+    private JLabel categoryLabel;
     private Point mouseDownCompCoords;
     private List<JButton> keyboardButtons;
     private ActionListener[] buttonListeners;
@@ -46,7 +47,7 @@ public class WindowDecoder extends JPanel{
         setBackground(branding.windowColor);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setVisible(false);
-        setPreferredSize(new Dimension(480, 280));
+        setPreferredSize(new Dimension(480, 290));
         Border white = BorderFactory.createLineBorder(branding.white, 3);
         Border shadow = BorderFactory.createMatteBorder(0,0,5,5,branding.shadow);
         Border border = BorderFactory.createCompoundBorder(shadow, white);
@@ -150,6 +151,13 @@ public class WindowDecoder extends JPanel{
         windowContentPanel.setBorder(BorderFactory.createEmptyBorder(10,10,5,10));
         windowContentPanel.setLayout(new BorderLayout());
 
+        // Category Label
+        categoryLabel = new JLabel("Context: ", JLabel.LEFT);
+        categoryLabel.setFont(branding.windowsFontMedium);
+        categoryLabel.setForeground(branding.black);
+        categoryLabel.setBorder(BorderFactory.createEmptyBorder(0, 2, 3, 0));
+        windowContentPanel.add(categoryLabel, BorderLayout.NORTH);
+
         // Words Display
         JPanel decoderDisplayPanel = new JPanel();
         decoderDisplayPanel.setBackground(branding.gray0);
@@ -165,7 +173,7 @@ public class WindowDecoder extends JPanel{
         redactedWordPanel.setOpaque(false);
         decoderDisplayPanel.add(redactedWordPanel);
 
-        windowContentPanel.add(decoderDisplayPanel, BorderLayout.NORTH);
+        windowContentPanel.add(decoderDisplayPanel, BorderLayout.CENTER);
 
         // Keys Panel
         JPanel decoderKeysPanel = new JPanel();
@@ -257,7 +265,7 @@ public class WindowDecoder extends JPanel{
             decoderKeysPanel.add(rowPanel, gbc);
         }
 
-        windowContentPanel.add(decoderKeysPanel, BorderLayout.CENTER);
+        windowContentPanel.add(decoderKeysPanel, BorderLayout.SOUTH);
 
         // Window Dragging Logic
         windowHeaderPanel.addMouseListener(new MouseAdapter() {

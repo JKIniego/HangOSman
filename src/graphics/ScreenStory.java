@@ -43,7 +43,7 @@ public class ScreenStory extends JPanel {
         lines.add("C:\\> WELCOME TO HANGOSMAN");
         lines.add("C:\\> The year is 1995...");
         lines.add("C:\\> News headlines, there is a heinous criminal on the run");
-        lines.add("C:\\> After some time, reports said that the criminal commited suicide by hanging");
+        lines.add("C:\\> After some time, reports stated that the criminal had ended his own life.");
         lines.add("C:\\> However, many believe he is still alive...");
         lines.add("C:\\> His files have been released but most are redacted.");
         lines.add("C:\\> You are an FBI agent uncovering the files for clues.");
