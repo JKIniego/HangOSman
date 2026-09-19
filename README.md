@@ -47,6 +47,3 @@ xcopy src\assets bin\assets /E /I
 ```bash
 java -cp bin App
 ```
-```bash
-java -cp bin App
-```
