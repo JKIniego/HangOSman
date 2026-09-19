@@ -24,9 +24,8 @@ The `JAVA PROJECTS` view allows you to manage your dependencies. More details ca
 cd path\to\Source Code
 ```
 
-### Step 2: Clean bin to be safe
+### Step 2: Create bin folder
 ```bash
-rmdir /S /Q bin
 mkdir bin
 ```
 
