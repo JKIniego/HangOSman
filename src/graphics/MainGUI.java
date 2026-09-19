@@ -188,6 +188,15 @@ public class MainGUI {
         timer.start();
     }
 
+    public void updateCategoryLabel(String category) {
+        if (scrnDesktop != null) {
+            WindowDecoder decoder = scrnDesktop.getWindowDecoder();
+            if (decoder != null) {
+                decoder.setCategory(category);
+            }
+        }
+    }
+
     public void renderNewRedactedWord(String redactedWord) {
         if (scrnDesktop != null) {
             WindowDecoder decoder = scrnDesktop.getWindowDecoder();

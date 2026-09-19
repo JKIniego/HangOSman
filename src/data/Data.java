@@ -1,17 +1,24 @@
 package data;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 public class Data {
     private char[] alphabet;
     private String[] tempWords;
     private ArrayList<String> wordBank = new ArrayList<>();
+    private Map<String, ArrayList<String>> categories = new LinkedHashMap<>();
+    private String currentCategory = "";
     private Set<Character> guessedLetters = new HashSet<>();
     private int correct, wrong, percentage;
     private int lives;
@@ -37,7 +44,23 @@ public class Data {
 
     public void extractWords() {
         System.out.println("Importing from CSV...");
-        InputStream is = Data.class.getResourceAsStream("Word Bank HangOSman.csv");
+        wordBank.clear();
+        categories.clear();
+
+        InputStream is = null;
+        File csvFile = new File("src/data/Word Bank HangOSman.csv");
+        if (csvFile.exists()) {
+            try {
+                is = new FileInputStream(csvFile);
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to open CSV from project folder", e);
+            }
+        } else {
+            is = Data.class.getResourceAsStream("/data/Word Bank HangOSman.csv");
+            if (is == null) {
+                is = Data.class.getResourceAsStream("Word Bank HangOSman.csv");
+            }
+        }
 
         if (is == null) {
             throw new RuntimeException("CSV file not found");
@@ -47,7 +70,33 @@ public class Data {
             String line;
 
             while ((line = reader.readLine()) != null) {
-                wordBank.add(line.toUpperCase());
+                String trimmed = line.trim();
+                if (trimmed.isEmpty()) {
+                    continue;
+                }
+
+                String[] row = trimmed.split("[,;]", 2);
+                if (row.length < 2) {
+                    continue;
+                }
+
+                String category = row[0].trim();
+                String categoryKey = category.toUpperCase(Locale.ROOT);
+                ArrayList<String> wordsForCategory = new ArrayList<>();
+                String wordList = row[1].trim();
+
+                for (String rawWord : wordList.split(";")) {
+                    String cleanedWord = rawWord.trim();
+                    if (!cleanedWord.isEmpty()) {
+                        String word = cleanedWord.toUpperCase(Locale.ROOT);
+                        wordsForCategory.add(word);
+                        wordBank.add(word);
+                    }
+                }
+
+                if (!categoryKey.isEmpty() && !wordsForCategory.isEmpty()) {
+                    categories.put(categoryKey, wordsForCategory);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -57,10 +106,27 @@ public class Data {
     // Setters
     public void setLives(int lives){this.lives = lives;}
     public void setTempWords(String[] tempWords){this.tempWords = tempWords;}
+    public void setCurrentCategory(String currentCategory) { this.currentCategory = currentCategory; }
 
     // Getters
     public int getLives(){return lives;}
     public ArrayList<String> getTempWords(){return wordBank;}
+    public ArrayList<String> getCategories() {
+        ArrayList<String> categoryList = new ArrayList<>();
+        for (String key : categories.keySet()) {
+            categoryList.add(key);
+        }
+        return categoryList;
+    }
+    public int getCategoryCount() { return categories.size(); }
+    public String getCurrentCategory() { return currentCategory; }
+    public ArrayList<String> getWordsForCategory(String category) {
+        if (category == null) {
+            return new ArrayList<>();
+        }
+        ArrayList<String> words = categories.get(category.toUpperCase(Locale.ROOT));
+        return words == null ? new ArrayList<>() : new ArrayList<>(words);
+    }
 
     public int getCorrect() {
         return correct;

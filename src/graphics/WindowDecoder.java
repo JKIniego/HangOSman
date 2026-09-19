@@ -309,7 +309,16 @@ public class WindowDecoder extends JPanel{
         add(windowContentPanel);
     }
 
+    public void setCategory(String category) {
+        if (category == null || category.trim().isEmpty()) {
+            categoryLabel.setText("Context: ");
+        } else {
+            categoryLabel.setText("Context: " + category);
+        }
+    }
+
     public void newRedactedWord(String redactedWord){
+        setCategory(mainEngine.getData().getCurrentCategory());
         redactedWordPanel.removeAll();
         int numLetters = redactedWord.length();
         redactedWordPanel.setLayout(new GridLayout(1, numLetters, 5, 0));

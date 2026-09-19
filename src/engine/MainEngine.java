@@ -2,6 +2,7 @@ package engine;
 
 import data.Data;
 import graphics.MainGUI;
+import java.util.ArrayList;
 
 // SystemOut starting in engine starts with "@"
 
@@ -98,6 +99,7 @@ public class MainEngine {
         isWordGuessed = false;
         data.setLives(6);
         data.getGuessedLetters().clear();
+        gui.updateCategoryLabel(data.getCurrentCategory());
         gui.renderNewRedactedWord(wordToGuess);
         gui.openWindows("Clear Leak");
         gui.updateStickmanStatus(data.getLives());
@@ -117,9 +119,31 @@ public class MainEngine {
     }
 
     public void getRandomRedactedWord(){
-        int randomIndex = (int)(Math.random() * data.getTempWords().size());
-        wordToGuess = data.getTempWords().get(randomIndex);
-        System.out.println("@ Random Redacted Word: " + wordToGuess);
+        ArrayList<String> categories = data.getCategories();
+        if (categories.isEmpty()) {
+            wordToGuess = "";
+            data.setCurrentCategory("Unknown");
+            return;
+        }
+
+        String selectedCategory = categories.get((int)(Math.random() * categories.size()));
+        ArrayList<String> wordsForCategory = data.getWordsForCategory(selectedCategory);
+
+        if (wordsForCategory.isEmpty()) {
+            wordToGuess = "";
+            data.setCurrentCategory(selectedCategory);
+            return;
+        }
+
+        int randomIndex = (int)(Math.random() * wordsForCategory.size());
+        wordToGuess = wordsForCategory.get(randomIndex);
+        data.setCurrentCategory(selectedCategory);
+
+        if (gui != null) {
+            gui.updateCategoryLabel(selectedCategory);
+        }
+
+        System.out.println("@ Random Redacted Word: " + wordToGuess + " [" + selectedCategory + "]");
     }
 
     public void setGUI(MainGUI gui) {
