@@ -16,3 +16,37 @@ Meanwhile, the compiled output files will be generated in the `bin` folder by de
 ## Dependency Management
 
 The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+
+## How To Run
+
+### Step 1: Go to the root of the project
+```bash
+cd path\to\Source Code
+```
+
+### Step 2: Clean bin to be safe
+```bash
+rmdir /S /Q bin
+mkdir bin
+```
+
+### Step 3: Compile all .java files
+```bash
+javac -d bin src\*.java src\data\*.java src\engine\*.java src\graphics\*.java
+```
+
+### Step 4: Copy only non-Java files from data and copy assets folder
+```bash
+xcopy src\data bin\data /E /I
+del bin\data\*.java
+ 
+xcopy src\assets bin\assets /E /I
+```
+
+### Step 5: Run the application from project root (HangOSman-main)
+```bash
+java -cp bin App
+```
+```bash
+java -cp bin App
+```
